@@ -1,0 +1,79 @@
+operations:
+  view:
+    - type: web
+      impl: index.html
+actions: actions
+web: web-src
+runtimeManifest:
+  packages:
+    oms-commerce-appbuilder:
+      license: Apache-2.0
+      actions:
+        generic:
+          function: actions/generic/index.js
+          web: 'no'
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+            OMS_API_BASE_URL: $OMS_API_BASE_URL
+            OMS_CLIENT_CERT_PASS: $OMS_CLIENT_CERT_PASS
+            OMS_USERNAME: $OMS_USERNAME
+            OMS_PASSWORD: $OMS_PASSWORD
+          annotations:
+            require-adobe-auth: false
+            final: true
+          include:
+            - ["files/*.p12", "secrets/"]
+        ShipmentRequest:
+          function: actions/ShipmentRequest/index.js
+          web: 'yes'
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+          annotations:
+            require-adobe-auth: false
+            final: true
+        OrderStatusChange:
+          function: actions/OrderStatusChange/index.js
+          web: 'yes'
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+            COMMERCE_BASE_URL: $COMMERCE_BASE_URL
+            COMMERCE_CONSUMER_KEY: $COMMERCE_CONSUMER_KEY
+            COMMERCE_CONSUMER_SECRET: $COMMERCE_CONSUMER_SECRET
+            COMMERCE_ACCESS_TOKEN: $COMMERCE_ACCESS_TOKEN
+            COMMERCE_ACCESS_TOKEN_SECRET: $COMMERCE_ACCESS_TOKEN_SECRET
+          annotations:
+            require-adobe-auth: false
+            final: true
+        ACCreateOrder:
+          function: actions/ACCreateOrder/index.js
+          web: 'no'
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: error
+            OMS_API_BASE_URL: $OMS_API_BASE_URL
+            OMS_CLIENT_CERT_PASS: $OMS_CLIENT_CERT_PASS
+            OMS_USERNAME: $OMS_USERNAME
+            OMS_PASSWORD: $OMS_PASSWORD
+          include:
+            - ["files/*.p12", "secrets/"]
+          annotations:
+            require-adobe-auth: false
+            final: true
+        CreateOrderOMS:
+          function: actions/CreateOrderOMS/index.js
+          web: 'yes'
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: error
+            OMS_API_BASE_URL: $OMS_API_BASE_URL
+            OMS_CLIENT_CERT_PASS: $OMS_CLIENT_CERT_PASS
+            OMS_USERNAME: $OMS_USERNAME
+            OMS_PASSWORD: $OMS_PASSWORD
+          include:
+            - ["files/*.p12", "secrets/"]
+          annotations:
+            require-adobe-auth: false
+            final: true

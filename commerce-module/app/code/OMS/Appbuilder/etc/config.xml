@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * IBM_Customer module
+ *
+ * @copyright Copyright (c) 2022 IBM Inc.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <omsappbuilder>
+            <connection>
+                <base_url>https://ims-na1.adobelogin.com/ims/token/v3</base_url>
+                <ssl_enabled>true</ssl_enabled>
+                <client_id>b98ffd718e5845ec9861c210642bdd75</client_id>
+                <client_secret>p8e-5LD1_NmyETzpbrqS12ErVmwBvZbCRQNm</client_secret>
+                <scope>AdobeID,openid,read_organizations,additional_info.projectedProductContext,additional_info.roles,adobeio_api,read_client_secret,manage_client_secrets,event_receiver_api</scope>
+                <x-gw-ims-org-id>91D55B255640B3AE7F000101@AdobeOrg</x-gw-ims-org-id>
+                <adobe_access_token>13ug3aeaimaq774dkm9qsbdi4kfll3f5</adobe_access_token>
+            </connection>
+            <services>
+                <base_webhookurl>https://48941-sterlingomsapp-tenantc.adobeio-static.net/api/v1/web/oms-commerce-appbuilder/</base_webhookurl>
+                <cancel_order_webhookurl>https://48941-sterlingomsapp-tenantc.adobeio-static.net/api/v1/web/oms-commerce-appbuilder/cancelWebhook</cancel_order_webhookurl>
+                <stock_detail_webhookurl>https://48941-sterlingomsapp-tenantc.adobeio-static.net/api/v1/web/oms-commerce-appbuilder/StockDetailOMS</stock_detail_webhookurl>
+                <delivery_time_Webhookurl>https://48941-sterlingomsapp-tenantc.adobeio-static.net/api/v1/web/oms-commerce-appbuilder/deliveryTimeWebhook</delivery_time_Webhookurl>
+                <location_stock_status_Webhookurl>https://48941-sterlingomsapp-tenantc.adobeio-static.net/api/v1/web/oms-commerce-appbuilder/StockDetailOMS</location_stock_status_Webhookurl>
+                <orderunhold_webhookurl>https://48941-sterlingomsapp-tenantc.adobeio-static.net/api/v1/web/oms-commerce-appbuilder/OrderUnholdWebhook</orderunhold_webhookurl>
+                 <reservation_oms_webhookurl>https://48941-sterlingomsapp-tenantc.adobeio-static.net/api/v1/web/oms-commerce-appbuilder/ReservationOMSWebhook</reservation_oms_webhookurl>
+                <adobe_apiurl>https://tenantc-d7vyety-ch6qlx6kkvx3a.us-4.magentosite.cloud/rest/V1/inventory/sources</adobe_apiurl>
+                <DocumentType>0001</DocumentType>
+                <EnterpriseCode>TenantC</EnterpriseCode>
+            </services>
+            <files>
+                <log_file_path>/var/log/</log_file_path>
+                <log_file_name>iac_appbuilder.log</log_file_name>
+            </files>
+        </omsappbuilder>
+    </default>
+</config>

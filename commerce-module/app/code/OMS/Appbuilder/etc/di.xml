@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * IBM_Customer module
+ *
+ * @copyright Copyright (c) 2022 IBM Inc.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    
+    <type name="OMS\Appbuilder\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="OMS\Appbuilder\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">customLogHandler</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="system" xsi:type="object">OMS\Appbuilder\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Api\OrderManagementInterface">
+        <plugin name="cancelOrderPlugin" type="OMS\Appbuilder\Plugin\CancelOrderPlugin" sortOrder="1" disabled="false"/>
+    </type>
+    <type name="Magento\Sales\Api\OrderManagementInterface">
+        <plugin name="unholdOrderPlugin" type="OMS\Appbuilder\Plugin\UnHoldOrderPlugin" sortOrder="1" disabled="false"/>
+    </type>
+</config>

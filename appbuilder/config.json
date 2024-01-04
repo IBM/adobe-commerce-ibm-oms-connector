@@ -1,0 +1,301 @@
+{
+    "project": {
+        "id": "4566206088344959737",
+        "name": "SterlingOMSApp",
+        "title": "SterlingOMS",
+        "org": {
+            "id": "48941",
+            "name": "IBM North America",
+            "ims_org_id": "91D55B255640B3AE7F000101@AdobeOrg",
+            "details": {
+                "services": [
+                    {
+                        "name": "API Mesh for Adobe Developer App Builder",
+                        "code": "GraphQLServiceSDK",
+                        "type": "adobeid"
+                    },
+                    {
+                        "name": "Adobe Express Embed SDK",
+                        "code": "CCEmbedCompanionAPI",
+                        "type": "adobeid"
+                    },
+                    {
+                        "name": "Adobe Stock",
+                        "code": "StockSDK",
+                        "type": "adobeid"
+                    },
+                    {
+                        "name": "Creative Cloud Libraries",
+                        "code": "CC-Libraries-SDK",
+                        "type": "adobeid"
+                    },
+                    {
+                        "name": "PDF Embed API",
+                        "code": "ViewSDK",
+                        "type": "adobeid"
+                    },
+                    {
+                        "name": "Adobe Commerce with Adobe ID",
+                        "code": "AdobeCommerceWithAdobeID",
+                        "type": "adobeid"
+                    },
+                    {
+                        "name": "Lightroom Services",
+                        "code": "LightroomPartnersSDK",
+                        "type": "adobeid"
+                    },
+                    {
+                        "name": "I/O Management API",
+                        "code": "AdobeIOManagementAPISDK",
+                        "type": "entp"
+                    },
+                    {
+                        "name": "Adobe Photoshop API",
+                        "code": "CIS SDK",
+                        "type": "entp"
+                    },
+                    {
+                        "name": "Primetime Ad Insertion",
+                        "code": "Ad Config Service",
+                        "type": "entp"
+                    },
+                    {
+                        "name": "Adobe I/O Events for Adobe Commerce",
+                        "code": "commerceeventing",
+                        "type": "entp"
+                    },
+                    {
+                        "name": "I/O Events",
+                        "code": "CloudIntegrationSDK",
+                        "type": "entp"
+                    }
+                ]
+            }
+        },
+        "workspace": {
+            "id": "4566206088344967146",
+            "name": "Development",
+            "title": "Development",
+            "description": "This Workspace will be used for Development activity",
+            "action_url": "https://48941-sterlingomsapp-development.adobeioruntime.net",
+            "app_url": "https://48941-sterlingomsapp-development.adobeio-static.net",
+            "details": {
+                "credentials": [
+                    {
+                        "id": "437282",
+                        "name": "SterlingOMS_J_1683213199742",
+                        "integration_type": "service"
+                    }
+                ],
+                "services": [
+                    {
+                        "code": "AdobeIOManagementAPISDK",
+                        "name": "I/O Management API"
+                    },
+                    {
+                        "code": "CloudIntegrationSDK",
+                        "name": "I/O Events"
+                    },
+                    {
+                        "code": "commerceeventing",
+                        "name": "Adobe I/O Events for Adobe Commerce"
+                    }
+                ],
+                "events": {
+                    "registrations": [
+                        {
+                            "id": "1063187",
+                            "name": "TestEvent",
+                            "description": "This is the event for testing",
+                            "enabled": "true",
+                            "client_id": "103241bd866a405ab4bc1cd93e7576a1",
+                            "registration_id": "dbe7c65d-2e8c-4ff0-a0d7-1d70659476f8",
+                            "webhook_status": "verified",
+                            "created_date": "2023-05-05T11:58:24.000Z",
+                            "updated_date": "2023-05-05T11:58:25.000Z",
+                            "webhook_url": "https://runtime.adobe.io/api/v1/web/48941-sterlingomsapp-development/acp/sync_event_handler_yEenyzqjvX?sync=true&id=yEenyzqjvX",
+                            "delivery_type": "webhook",
+                            "runtime_action": "oms-commerce-integration/generic",
+                            "events_url": "https://events-va6.adobe.io/events/organizations/48941/integrations/437282/dbe7c65d-2e8c-4ff0-a0d7-1d70659476f8",
+                            "trace_url": "https://eventtraces-va6.adobe.io/traces/48941/4566206088344959737/4566206088344967146/registration/dbe7c65d-2e8c-4ff0-a0d7-1d70659476f8",
+                            "events_of_interest": [
+                                {
+                                    "event_code": "ibm.sterling.oms.testevent",
+                                    "provider_id": "65f18ecd-9691-433d-9218-44a535151537",
+                                    "event_label": "IBM Sterling OMS Testing Event Provider for  ibm.sterling.oms.testevent SterlingOMSProviderStaging",
+                                    "event_description": "ibm.sterling.oms.testevent for testing",
+                                    "provider_label": "SterlingOMSProviderStg",
+                                    "provider_description": "Sterling OMS Event provider for Stating",
+                                    "provider_docs_url": "https://developer.adobe.com/events/docs/guides/api/provider_api/",
+                                    "event_delivery_format": "cloud_events_v1",
+                                    "provider_metadata": "3rd_party_custom_events"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "1074879",
+                            "name": "ShipmentRequest",
+                            "enabled": "true",
+                            "client_id": "103241bd866a405ab4bc1cd93e7576a1",
+                            "registration_id": "d7347e7c-304b-49cc-b58b-8dcd1d9c4248",
+                            "webhook_status": "verified",
+                            "created_date": "2023-05-17T09:25:45.000Z",
+                            "updated_date": "2023-05-17T09:25:45.000Z",
+                            "webhook_url": "https://runtime.adobe.io/api/v1/web/48941-sterlingomsapp-development/acp/sync_event_handler_zCbXjlrgkF?sync=true&id=zCbXjlrgkF",
+                            "delivery_type": "webhook",
+                            "runtime_action": "oms-commerce-appbuilder/__secured_ShipmentRequest",
+                            "events_url": "https://events-va6.adobe.io/events/organizations/48941/integrations/437282/d7347e7c-304b-49cc-b58b-8dcd1d9c4248",
+                            "trace_url": "https://eventtraces-va6.adobe.io/traces/48941/4566206088344959737/4566206088344967146/registration/d7347e7c-304b-49cc-b58b-8dcd1d9c4248",
+                            "events_of_interest": [
+                                {
+                                    "event_code": "ibm.sterling.adobe.shipment_request.v0",
+                                    "provider_id": "673c8007-5c9a-445a-b49c-59fe2932a6a1",
+                                    "event_label": "IBM Sterling OMS Development Event Provider for  ibm.sterling.adobe.shipment_request.v0 SterlingOMSProviderDev",
+                                    "event_description": "ibm.sterling.adobe.shipment_request.v0 for Development",
+                                    "provider_label": "SterlingOMSProviderDev",
+                                    "provider_description": "Sterling OMS Event provider for Development",
+                                    "provider_docs_url": "https://developer.adobe.com/events/docs/guides/api/provider_api/",
+                                    "event_delivery_format": "cloud_events_v1",
+                                    "provider_metadata": "3rd_party_custom_events"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "1074951",
+                            "name": "OrderStatusChange",
+                            "enabled": "true",
+                            "client_id": "103241bd866a405ab4bc1cd93e7576a1",
+                            "registration_id": "787a6de5-40af-443b-a25f-293096cb9fd8",
+                            "webhook_status": "verified",
+                            "created_date": "2023-05-17T16:49:19.000Z",
+                            "updated_date": "2023-05-17T16:49:19.000Z",
+                            "webhook_url": "https://runtime.adobe.io/api/v1/web/48941-sterlingomsapp-development/acp/sync_event_handler_gc76a1pyxO?sync=true&id=gc76a1pyxO",
+                            "delivery_type": "webhook",
+                            "runtime_action": "oms-commerce-appbuilder/OrderStatusChange",
+                            "events_url": "https://events-va6.adobe.io/events/organizations/48941/integrations/437282/787a6de5-40af-443b-a25f-293096cb9fd8",
+                            "trace_url": "https://eventtraces-va6.adobe.io/traces/48941/4566206088344959737/4566206088344967146/registration/787a6de5-40af-443b-a25f-293096cb9fd8",
+                            "events_of_interest": [
+                                {
+                                    "event_code": "ibm.sterling.adobe.order_status_change.v0",
+                                    "provider_id": "673c8007-5c9a-445a-b49c-59fe2932a6a1",
+                                    "event_label": "IBM Sterling OMS Development Event Provider for  ibm.sterling.adobe.order_status_change.v0 SterlingOMSProviderDev",
+                                    "event_description": "ibm.sterling.adobe.order_status_change.v0 for Development",
+                                    "provider_label": "SterlingOMSProviderDev",
+                                    "provider_description": "Sterling OMS Event provider for Development",
+                                    "provider_docs_url": "https://developer.adobe.com/events/docs/guides/api/provider_api/",
+                                    "event_delivery_format": "cloud_events_v1",
+                                    "provider_metadata": "3rd_party_custom_events"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "1089909",
+                            "name": "CreateOrderOMS",
+                            "enabled": "true",
+                            "client_id": "103241bd866a405ab4bc1cd93e7576a1",
+                            "registration_id": "a29c3504-a67c-446e-b752-96970dc971a2",
+                            "webhook_status": "unstable",
+                            "created_date": "2023-05-30T13:08:40.000Z",
+                            "updated_date": "2023-06-12T07:23:02.000Z",
+                            "webhook_url": "https://runtime.adobe.io/api/v1/web/48941-sterlingomsapp-development/acp/sync_event_handler_ocXbvCnoHx?sync=true&id=ocXbvCnoHx",
+                            "delivery_type": "webhook",
+                            "runtime_action": "oms-commerce-appbuilder/ACCreateOrder",
+                            "events_url": "https://events-va6.adobe.io/events/organizations/48941/integrations/437282/a29c3504-a67c-446e-b752-96970dc971a2",
+                            "trace_url": "https://eventtraces-va6.adobe.io/traces/48941/4566206088344959737/4566206088344967146/registration/a29c3504-a67c-446e-b752-96970dc971a2",
+                            "events_of_interest": [
+                                {
+                                    "event_code": "com.adobe.commerce.observer.sales_order_save_commit_after",
+                                    "provider_id": "33d7f7e1-7602-434b-bad8-9931662f099b",
+                                    "event_label": "Observer event sales_order_save_commit_after",
+                                    "event_description": "Observer event sales_order_save_commit_after",
+                                    "provider_label": "SterlingACProviderDev",
+                                    "provider_description": "Sterling Adobe Commerce Event Provider for Development (Instance SterlingOMSACDev)",
+                                    "event_delivery_format": "cloud_events_v1",
+                                    "provider_metadata": "dx_commerce_events"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "1092506",
+                            "name": "OrderHoldAC",
+                            "enabled": "true",
+                            "client_id": "103241bd866a405ab4bc1cd93e7576a1",
+                            "registration_id": "6c1665eb-d4da-430f-b1bd-1c364a3eea39",
+                            "webhook_status": "unstable",
+                            "created_date": "2023-06-02T17:41:58.000Z",
+                            "updated_date": "2023-06-09T12:59:01.000Z",
+                            "webhook_url": "https://runtime.adobe.io/api/v1/web/48941-sterlingomsapp-development/acp/sync_event_handler_ocaHAL6OWE?sync=true&id=ocaHAL6OWE",
+                            "delivery_type": "webhook",
+                            "runtime_action": "oms-commerce-appbuilder/OrderHoldAC",
+                            "events_url": "https://events-va6.adobe.io/events/organizations/48941/integrations/437282/6c1665eb-d4da-430f-b1bd-1c364a3eea39",
+                            "trace_url": "https://eventtraces-va6.adobe.io/traces/48941/4566206088344959737/4566206088344967146/registration/6c1665eb-d4da-430f-b1bd-1c364a3eea39",
+                            "events_of_interest": [
+                                {
+                                    "event_code": "ibm.sterling.appbuilder.order_hold",
+                                    "provider_id": "fb8fc066-0d0e-4c5f-a802-652a4c9f5765",
+                                    "event_label": "IBM Sterling OMS ibm.sterling.appbuilder.order_hold Event for Provider SterlingAppBuilderProviderDev",
+                                    "event_description": "ibm.sterling.appbuilder.order_hold for SterlingAppBuilderProviderDev 2JUNE",
+                                    "provider_label": "SterlingAppBuilderProviderDev",
+                                    "provider_description": "Sterling OMS AppBuilder provider of SterlingAppBuilderProviderDev QA 2JUN",
+                                    "provider_docs_url": "https://developer.adobe.com/events/docs/guides/api/provider_api/",
+                                    "event_delivery_format": "cloud_events_v1",
+                                    "provider_metadata": "3rd_party_custom_events"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "1092527",
+                            "name": "OrderUnholdOMS",
+                            "description": "Order Unhold trigger from OMS system ",
+                            "enabled": "true",
+                            "client_id": "103241bd866a405ab4bc1cd93e7576a1",
+                            "registration_id": "85fb68c5-a4ef-4b2d-82bd-7bb05bdcf6c0",
+                            "webhook_status": "unstable",
+                            "created_date": "2023-06-02T19:53:04.000Z",
+                            "updated_date": "2023-06-09T09:55:36.000Z",
+                            "webhook_url": "https://runtime.adobe.io/api/v1/web/48941-sterlingomsapp-development/acp/sync_event_handler_Um6AKkGLQd?sync=true&id=Um6AKkGLQd",
+                            "delivery_type": "webhook",
+                            "runtime_action": "oms-commerce-appbuilder/OrderUnholdOMS",
+                            "events_url": "https://events-va6.adobe.io/events/organizations/48941/integrations/437282/85fb68c5-a4ef-4b2d-82bd-7bb05bdcf6c0",
+                            "trace_url": "https://eventtraces-va6.adobe.io/traces/48941/4566206088344959737/4566206088344967146/registration/85fb68c5-a4ef-4b2d-82bd-7bb05bdcf6c0",
+                            "events_of_interest": [
+                                {
+                                    "event_code": "ibm.sterling.adobe.order_unhold.v0",
+                                    "provider_id": "673c8007-5c9a-445a-b49c-59fe2932a6a1",
+                                    "event_label": "IBM Sterling OMS Development Event Provider for  ibm.sterling.adobe.order_unhold.v0 SterlingOMSProviderDev",
+                                    "event_description": "ibm.sterling.adobe.order_unhold.v0 for Development",
+                                    "provider_label": "SterlingOMSProviderDev",
+                                    "provider_description": "Sterling OMS Event provider for Development",
+                                    "provider_docs_url": "https://developer.adobe.com/events/docs/guides/api/provider_api/",
+                                    "event_delivery_format": "cloud_events_v1",
+                                    "provider_metadata": "3rd_party_custom_events"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "endpoints": {
+                "dx/excshell/1": {
+                    "view": [
+                        {
+                            "href": "https://48941-sterlingomsapp-development.adobeio-static.net/index.html",
+                            "metadata": {
+                                "services": [
+                                    {
+                                        "code": "AdobeIOManagementAPISDK",
+                                        "name": "I/O Management API"
+                                    }
+                                ],
+                                "profile": {
+                                    "client_id": "firefly-app",
+                                    "scope": "ab.manage,additional_info.job_function,additional_info.projectedProductContext,additional_info.roles,additional_info,AdobeID,adobeio_api,adobeio.appregistry.read,audiencemanager_api,creative_cloud,mps,openid,read_organizations,read_pc.acp,read_pc.dma_tartan,read_pc,session"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

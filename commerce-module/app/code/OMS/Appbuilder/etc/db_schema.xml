@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+       <table name="sales_order" resource="sales" engine="innodb">
+                <column xsi:type="text" name="oms_reservation_id" nullable="true" comment="oms reservation id"/>        
+        </table>
+       <table name="quote" resource="checkout" engine="innodb">
+                <column xsi:type="text" name="oms_reservation_id" nullable="true" comment="oms reservation id"/>
+        </table>
+</schema>

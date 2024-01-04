@@ -1,0 +1,12 @@
+{
+    "sales_order": {
+        "column": {
+            "oms_reservation_id": true
+        }
+    },
+    "quote": {
+        "column": {
+            "oms_reservation_id": true
+        }
+    }
+}

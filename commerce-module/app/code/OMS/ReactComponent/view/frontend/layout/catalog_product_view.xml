@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * IBM_Customer module
+ *
+ * @copyright Copyright (c) 2022 IBM Inc.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="product.info.main">
+            <block class="Magento\Catalog\Block\Product\View" name="delivery.info.react" template="OMS_ReactComponent::deliveryinfo.phtml" after="product.info.price"/>
+        </referenceContainer>
+    </body>
+</page>

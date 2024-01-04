@@ -1,0 +1,396 @@
+operations:
+  view:
+    - type: web
+      impl: index.html
+actions: actions
+web: web-src
+runtimeManifest:
+  packages:
+    oms-commerce-appbuilder:
+      license: Apache-2.0
+      actions:
+        generic:
+          function: actions/generic/index.js
+          web: "no"
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+            OMS_API_BASE_URL: $OMS_API_BASE_URL
+            OMS_CLIENT_CERT_PASS: $OMS_CLIENT_CERT_PASS
+            OMS_USERNAME: $OMS_USERNAME
+            OMS_PASSWORD: $OMS_PASSWORD
+          annotations:
+            require-adobe-auth: false
+            final: true
+          include:
+            - - files/*.p12
+              - secrets/
+        OrderUnholdWebhook:
+          function: actions/OrderUnholdWebhook/index.js
+          web: "yes"
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+            HOLD_AMOUNT: $HOLD_AMOUNT
+            OMS_API_BASE_URL: $OMS_API_BASE_URL
+            OMS_CLIENT_CERT_PASS: $OMS_CLIENT_CERT_PASS
+            OMS_USERNAME: $OMS_USERNAME
+            OMS_PASSWORD: $OMS_PASSWORD
+          include:
+            - - files/*.p12
+              - secrets/
+          annotations:
+            require-adobe-auth: true
+            final: true
+        OMSTest:
+          function: actions/OMSTest/index.js
+          web: "no"
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+            OMS_API_BASE_URL: $OMS_API_BASE_URL
+            OMS_CLIENT_CERT_PASS: $OMS_CLIENT_CERT_PASS
+            OMS_USERNAME: $OMS_USERNAME
+            OMS_PASSWORD: $OMS_PASSWORD
+            AIO_EVENTS_ORG_ID: $AIO_EVENTS_ORG_ID
+            AIO_EVENTS_API_KEY: $AIO_EVENTS_API_KEY
+            AIO_EVENTS_JWT_TOKEN: $AIO_EVENTS_JWT_TOKEN
+            AIO_EVENTS_CUSTOM_PROVIDER_ID: $AIO_EVENTS_CUSTOM_PROVIDER_ID
+            AIO_EVENTS_ORDER_HOLD_EVENT_CODE: $AIO_EVENTS_ORDER_HOLD_EVENT_CODE
+            APPBUILDER_CLIENT_ID: $APPBUILDER_CLIENT_ID
+            APPBUILDER_CLIENT_SECRET: $APPBUILDER_CLIENT_SECRET
+            APPBUILDER_CLIENT_SCOPE: $APPBUILDER_CLIENT_SCOPE
+            APPBUILDER_CLIENT_OAUTH_URL: $APPBUILDER_CLIENT_OAUTH_URL
+            OMS_ADMIN_USERNAME: $OMS_ADMIN_USERNAME
+            OMS_ADMIN_PASSWORD: $OMS_ADMIN_PASSWORD
+            COMMERCE_BASE_URL: $COMMERCE_BASE_URL
+            COMMERCE_CONSUMER_KEY: $COMMERCE_CONSUMER_KEY
+            COMMERCE_CONSUMER_SECRET: $COMMERCE_CONSUMER_SECRET
+            COMMERCE_ACCESS_TOKEN: $COMMERCE_ACCESS_TOKEN
+            COMMERCE_ACCESS_TOKEN_SECRET: $COMMERCE_ACCESS_TOKEN_SECRET
+            SCHEDULE_MINUTES_HOLD_OMS: $SCHEDULE_MINUTES_HOLD_OMS
+            PAYMENT_AUTHORIZATION_SPAN: $PAYMENT_AUTHORIZATION_SPAN
+        ShipmentChangeOMS:
+          function: actions/ShipmentChangeOMS/index.js
+          web: "yes"
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+            OMS_API_BASE_URL: $OMS_API_BASE_URL
+            OMS_CLIENT_CERT_PASS: $OMS_CLIENT_CERT_PASS
+            OMS_USERNAME: $OMS_USERNAME
+            OMS_PASSWORD: $OMS_PASSWORD
+            OMS_ADMIN_USERNAME: $OMS_ADMIN_USERNAME
+            OMS_ADMIN_PASSWORD: $OMS_ADMIN_PASSWORD
+            COMMERCE_BASE_URL: $COMMERCE_BASE_URL
+            COMMERCE_CONSUMER_KEY: $COMMERCE_CONSUMER_KEY
+            COMMERCE_CONSUMER_SECRET: $COMMERCE_CONSUMER_SECRET
+            COMMERCE_ACCESS_TOKEN: $COMMERCE_ACCESS_TOKEN
+            COMMERCE_ACCESS_TOKEN_SECRET: $COMMERCE_ACCESS_TOKEN_SECRET
+          include:
+            - - files/*.p12
+              - secrets/
+          annotations:
+            require-adobe-auth: false
+            final: true
+        deliveryTimeWebhook:
+          function: actions/deliveryTimeWebhook/index.js
+          web: "yes"
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+            OMS_API_BASE_URL: $OMS_API_BASE_URL
+            OMS_CLIENT_CERT_PASS: $OMS_CLIENT_CERT_PASS
+            OMS_ADMIN_USERNAME: $OMS_ADMIN_USERNAME
+            OMS_ADMIN_PASSWORD: $OMS_ADMIN_PASSWORD
+          include:
+            - - files/*.p12
+              - secrets/
+          annotations:
+            require-adobe-auth: false
+            final: true
+        StockDetailOMS:
+          function: actions/StockDetailOMS/index.js
+          web: "yes"
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+            OMS_API_BASE_URL: $OMS_API_BASE_URL
+            OMS_CLIENT_CERT_PASS: $OMS_CLIENT_CERT_PASS
+            OMS_ADMIN_USERNAME: $OMS_ADMIN_USERNAME
+            OMS_ADMIN_PASSWORD: $OMS_ADMIN_PASSWORD
+          include:
+            - - files/*.p12
+              - secrets/
+          annotations:
+            require-adobe-auth: true
+            final: true
+        CarrierWebhook:
+          function: actions/CarrierWebhook/index.js
+          web: "yes"
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+          annotations:
+            require-adobe-auth: false
+            final: true
+        OMSEventAction:
+          function: actions/OMSEventAction/index.js
+          web: "no"
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+            HOLD_AMOUNT: $HOLD_AMOUNT
+            OMS_API_BASE_URL: $OMS_API_BASE_URL
+            OMS_CLIENT_CERT_PASS: $OMS_CLIENT_CERT_PASS
+            OMS_USERNAME: $OMS_USERNAME
+            OMS_PASSWORD: $OMS_PASSWORD
+            AIO_EVENTS_ORG_ID: $AIO_EVENTS_ORG_ID
+            AIO_EVENTS_API_KEY: $AIO_EVENTS_API_KEY
+            AIO_EVENTS_JWT_TOKEN: $AIO_EVENTS_JWT_TOKEN
+            AIO_EVENTS_CUSTOM_PROVIDER_ID: $AIO_EVENTS_CUSTOM_PROVIDER_ID
+            AIO_EVENTS_ORDER_HOLD_EVENT_CODE: $AIO_EVENTS_ORDER_HOLD_EVENT_CODE
+            APPBUILDER_CLIENT_ID: $APPBUILDER_CLIENT_ID
+            APPBUILDER_CLIENT_SECRET: $APPBUILDER_CLIENT_SECRET
+            APPBUILDER_CLIENT_SCOPE: $APPBUILDER_CLIENT_SCOPE
+            APPBUILDER_CLIENT_OAUTH_URL: $APPBUILDER_CLIENT_OAUTH_URL
+            OMS_ADMIN_USERNAME: $OMS_ADMIN_USERNAME
+            OMS_ADMIN_PASSWORD: $OMS_ADMIN_PASSWORD
+            COMMERCE_BASE_URL: $COMMERCE_BASE_URL
+            COMMERCE_CONSUMER_KEY: $COMMERCE_CONSUMER_KEY
+            COMMERCE_CONSUMER_SECRET: $COMMERCE_CONSUMER_SECRET
+            COMMERCE_ACCESS_TOKEN: $COMMERCE_ACCESS_TOKEN
+            COMMERCE_ACCESS_TOKEN_SECRET: $COMMERCE_ACCESS_TOKEN_SECRET
+          include:
+            - - files/*.p12
+              - secrets/
+          annotations:
+            require-adobe-auth: false
+            final: true
+          limits:
+            timeout: 1800000
+        ACEventAction:
+          function: actions/ACEventAction/index.js
+          web: "no"
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+            HOLD_AMOUNT: $HOLD_AMOUNT
+            OMS_API_BASE_URL: $OMS_API_BASE_URL
+            OMS_CLIENT_CERT_PASS: $OMS_CLIENT_CERT_PASS
+            OMS_USERNAME: $OMS_USERNAME
+            OMS_PASSWORD: $OMS_PASSWORD
+            AIO_EVENTS_ORG_ID: $AIO_EVENTS_ORG_ID
+            AIO_EVENTS_API_KEY: $AIO_EVENTS_API_KEY
+            AIO_EVENTS_JWT_TOKEN: $AIO_EVENTS_JWT_TOKEN
+            AIO_EVENTS_CUSTOM_PROVIDER_ID: $AIO_EVENTS_CUSTOM_PROVIDER_ID
+            AIO_EVENTS_ORDER_HOLD_EVENT_CODE: $AIO_EVENTS_ORDER_HOLD_EVENT_CODE
+            APPBUILDER_CLIENT_ID: $APPBUILDER_CLIENT_ID
+            APPBUILDER_CLIENT_SECRET: $APPBUILDER_CLIENT_SECRET
+            APPBUILDER_CLIENT_SCOPE: $APPBUILDER_CLIENT_SCOPE
+            APPBUILDER_CLIENT_OAUTH_URL: $APPBUILDER_CLIENT_OAUTH_URL
+            OMS_ADMIN_USERNAME: $OMS_ADMIN_USERNAME
+            OMS_ADMIN_PASSWORD: $OMS_ADMIN_PASSWORD
+            COMMERCE_BASE_URL: $COMMERCE_BASE_URL
+            COMMERCE_CONSUMER_KEY: $COMMERCE_CONSUMER_KEY
+            COMMERCE_CONSUMER_SECRET: $COMMERCE_CONSUMER_SECRET
+            COMMERCE_ACCESS_TOKEN: $COMMERCE_ACCESS_TOKEN
+            COMMERCE_ACCESS_TOKEN_SECRET: $COMMERCE_ACCESS_TOKEN_SECRET
+            SCHEDULE_MINUTES_HOLD_OMS: $SCHEDULE_MINUTES_HOLD_OMS
+            PAYMENT_AUTHORIZATION_SPAN: $PAYMENT_AUTHORIZATION_SPAN
+          include:
+            - - files/*.p12
+              - secrets/
+          annotations:
+            require-adobe-auth: false
+            final: true
+          limits:
+            timeout: 1800000
+        ABEventAction:
+          function: actions/ABEventAction/index.js
+          web: "no"
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+            HOLD_AMOUNT: $HOLD_AMOUNT
+            OMS_API_BASE_URL: $OMS_API_BASE_URL
+            OMS_CLIENT_CERT_PASS: $OMS_CLIENT_CERT_PASS
+            OMS_USERNAME: $OMS_USERNAME
+            OMS_PASSWORD: $OMS_PASSWORD
+            AIO_EVENTS_ORG_ID: $AIO_EVENTS_ORG_ID
+            AIO_EVENTS_API_KEY: $AIO_EVENTS_API_KEY
+            AIO_EVENTS_JWT_TOKEN: $AIO_EVENTS_JWT_TOKEN
+            AIO_EVENTS_CUSTOM_PROVIDER_ID: $AIO_EVENTS_CUSTOM_PROVIDER_ID
+            AIO_EVENTS_ORDER_HOLD_EVENT_CODE: $AIO_EVENTS_ORDER_HOLD_EVENT_CODE
+            APPBUILDER_CLIENT_ID: $APPBUILDER_CLIENT_ID
+            APPBUILDER_CLIENT_SECRET: $APPBUILDER_CLIENT_SECRET
+            APPBUILDER_CLIENT_SCOPE: $APPBUILDER_CLIENT_SCOPE
+            APPBUILDER_CLIENT_OAUTH_URL: $APPBUILDER_CLIENT_OAUTH_URL
+            OMS_ADMIN_USERNAME: $OMS_ADMIN_USERNAME
+            OMS_ADMIN_PASSWORD: $OMS_ADMIN_PASSWORD
+            COMMERCE_BASE_URL: $COMMERCE_BASE_URL
+            COMMERCE_CONSUMER_KEY: $COMMERCE_CONSUMER_KEY
+            COMMERCE_CONSUMER_SECRET: $COMMERCE_CONSUMER_SECRET
+            COMMERCE_ACCESS_TOKEN: $COMMERCE_ACCESS_TOKEN
+            COMMERCE_ACCESS_TOKEN_SECRET: $COMMERCE_ACCESS_TOKEN_SECRET
+          include:
+            - - files/*.p12
+              - secrets/
+          annotations:
+            require-adobe-auth: true
+            final: true
+        GenerateProviderEvent:
+          function: actions/GenerateProviderEvent/index.js
+          web: "yes"
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+            API_ENDPOINT: $API_ENDPOINT
+            OAUTH_BASE_URL: $OAUTH_BASE_URL
+            OAUTH_CLIENT_ID: $OAUTH_CLIENT_ID
+            OAUTH_CLIENT_SECRET: $OAUTH_CLIENT_SECRET
+            OAUTH_SCOPES: $OAUTH_SCOPES
+            IO_MANAGEMENT_BASE_URL: $IO_MANAGEMENT_BASE_URL
+            IO_CONSUMER_ID: $IO_CONSUMER_ID
+            IO_PROJECT_ID: $IO_PROJECT_ID
+            IO_WORKSPACE_ID: $IO_WORKSPACE_ID
+          annotations:
+            require-adobe-auth: false
+            final: true
+          relations:
+            event-listener-for: []
+        cancelWebhook:
+          function: actions/cancelWebhook/index.js
+          web: "yes"
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+            OMS_API_BASE_URL: $OMS_API_BASE_URL
+            OMS_CLIENT_CERT_PASS: $OMS_CLIENT_CERT_PASS
+            OMS_USERNAME: $OMS_USERNAME
+            OMS_PASSWORD: $OMS_PASSWORD
+            OMS_ADMIN_USERNAME: $OMS_ADMIN_USERNAME
+            OMS_ADMIN_PASSWORD: $OMS_ADMIN_PASSWORD
+            COMMERCE_BASE_URL: $COMMERCE_BASE_URL
+            COMMERCE_CONSUMER_KEY: $COMMERCE_CONSUMER_KEY
+            COMMERCE_CONSUMER_SECRET: $COMMERCE_CONSUMER_SECRET
+            COMMERCE_ACCESS_TOKEN: $COMMERCE_ACCESS_TOKEN
+            COMMERCE_ACCESS_TOKEN_SECRET: $COMMERCE_ACCESS_TOKEN_SECRET
+          include:
+            - - files/*.p12
+              - secrets/
+          annotations:
+            require-adobe-auth: false
+            final: true
+        BackOrderCancelWebhook:
+          function: actions/BackOrderCancelWebhook/index.js
+          web: "yes"
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+          annotations:
+            require-adobe-auth: true
+            final: true
+        ACSourceWebhook:
+          function: actions/ACSourceWebhook/index.js
+          web: "yes"
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+            HOLD_AMOUNT: $HOLD_AMOUNT
+            apiKey: $SERVICE_API_KEY
+            OMS_API_BASE_URL: $OMS_API_BASE_URL
+            OMS_CLIENT_CERT_PASS: $OMS_CLIENT_CERT_PASS
+            OMS_ADMIN_USERNAME: $OMS_ADMIN_USERNAME
+            OMS_ADMIN_PASSWORD: $OMS_ADMIN_PASSWORD
+            COMMERCE_BASE_URL: $COMMERCE_BASE_URL
+            COMMERCE_CONSUMER_KEY: $COMMERCE_CONSUMER_KEY
+            COMMERCE_CONSUMER_SECRET: $COMMERCE_CONSUMER_SECRET
+            COMMERCE_ACCESS_TOKEN: $COMMERCE_ACCESS_TOKEN
+            COMMERCE_ACCESS_TOKEN_SECRET: $COMMERCE_ACCESS_TOKEN_SECRET
+          annotations:
+            require-adobe-auth: false
+            final: true
+        CreditMemoJournalAction:
+          function: actions/CreditMemoJournalAction/index.js
+          web: "yes"
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+            HOLD_AMOUNT: $HOLD_AMOUNT
+            JOURNALLING_URL: $JOURNALLING_URL
+            technical_account_email: $technical_account_email
+            technical_account_id: $technical_account_id
+            OMS_API_BASE_URL: $OMS_API_BASE_URL
+            OMS_CLIENT_CERT_PASS: $OMS_CLIENT_CERT_PASS
+            OMS_USERNAME: $OMS_USERNAME
+            OMS_PASSWORD: $OMS_PASSWORD
+            AIO_EVENTS_ORG_ID: $AIO_EVENTS_ORG_ID
+            AIO_EVENTS_API_KEY: $AIO_EVENTS_API_KEY
+            AIO_EVENTS_JWT_TOKEN: $AIO_EVENTS_JWT_TOKEN
+            AIO_EVENTS_CUSTOM_PROVIDER_ID: $AIO_EVENTS_CUSTOM_PROVIDER_ID
+            AIO_EVENTS_ORDER_HOLD_EVENT_CODE: $AIO_EVENTS_ORDER_HOLD_EVENT_CODE
+            APPBUILDER_CLIENT_ID: $APPBUILDER_CLIENT_ID
+            APPBUILDER_CLIENT_SECRET: $APPBUILDER_CLIENT_SECRET
+            APPBUILDER_CLIENT_SCOPE: $APPBUILDER_CLIENT_SCOPE
+            APPBUILDER_CLIENT_OAUTH_URL: $APPBUILDER_CLIENT_OAUTH_URL
+            OMS_ADMIN_USERNAME: $OMS_ADMIN_USERNAME
+            OMS_ADMIN_PASSWORD: $OMS_ADMIN_PASSWORD
+            COMMERCE_BASE_URL: $COMMERCE_BASE_URL
+            COMMERCE_CONSUMER_KEY: $COMMERCE_CONSUMER_KEY
+            COMMERCE_CONSUMER_SECRET: $COMMERCE_CONSUMER_SECRET
+            COMMERCE_ACCESS_TOKEN: $COMMERCE_ACCESS_TOKEN
+            COMMERCE_ACCESS_TOKEN_SECRET: $COMMERCE_ACCESS_TOKEN_SECRET
+            SCHEDULE_MINUTES_HOLD_OMS: $SCHEDULE_MINUTES_HOLD_OMS
+            PAYMENT_AUTHORIZATION_SPAN: $PAYMENT_AUTHORIZATION_SPAN
+          include:
+            - - files/*.p12
+              - secrets/
+          annotations:
+            require-adobe-auth: false
+            final: true
+        ReservationOMSWebhook:
+          function: actions/ReservationOMSWebhook/index.js
+          web: "yes"
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+            RESERVATION_EXPIRE_MINUTES: $RESERVATION_EXPIRE_MINUTES
+            HOLD_AMOUNT: $HOLD_AMOUNT
+            OMS_API_BASE_URL: $OMS_API_BASE_URL
+            OMS_CLIENT_CERT_PASS: $OMS_CLIENT_CERT_PASS
+            OMS_USERNAME: $OMS_USERNAME
+            OMS_PASSWORD: $OMS_PASSWORD
+            AIO_EVENTS_ORG_ID: $AIO_EVENTS_ORG_ID
+            AIO_EVENTS_API_KEY: $AIO_EVENTS_API_KEY
+            AIO_EVENTS_JWT_TOKEN: $AIO_EVENTS_JWT_TOKEN
+            AIO_EVENTS_CUSTOM_PROVIDER_ID: $AIO_EVENTS_CUSTOM_PROVIDER_ID
+            AIO_EVENTS_ORDER_HOLD_EVENT_CODE: $AIO_EVENTS_ORDER_HOLD_EVENT_CODE
+            APPBUILDER_CLIENT_ID: $APPBUILDER_CLIENT_ID
+            APPBUILDER_CLIENT_SECRET: $APPBUILDER_CLIENT_SECRET
+            APPBUILDER_CLIENT_SCOPE: $APPBUILDER_CLIENT_SCOPE
+            APPBUILDER_CLIENT_OAUTH_URL: $APPBUILDER_CLIENT_OAUTH_URL
+            OMS_ADMIN_USERNAME: $OMS_ADMIN_USERNAME
+            OMS_ADMIN_PASSWORD: $OMS_ADMIN_PASSWORD
+            COMMERCE_BASE_URL: $COMMERCE_BASE_URL
+            COMMERCE_CONSUMER_KEY: $COMMERCE_CONSUMER_KEY
+            COMMERCE_CONSUMER_SECRET: $COMMERCE_CONSUMER_SECRET
+            COMMERCE_ACCESS_TOKEN: $COMMERCE_ACCESS_TOKEN
+            COMMERCE_ACCESS_TOKEN_SECRET: $COMMERCE_ACCESS_TOKEN_SECRET
+            SCHEDULE_MINUTES_HOLD_OMS: $SCHEDULE_MINUTES_HOLD_OMS
+            PAYMENT_AUTHORIZATION_SPAN: $PAYMENT_AUTHORIZATION_SPAN
+          include:
+            - - files/*.p12
+              - secrets/
+          annotations:
+            require-adobe-auth: false
+            final: true
+      triggers:
+        everyMin:
+          feed: /whisk.system/alarms/interval
+          inputs:
+            minutes: 1
+      rules:
+        everyMinRule:
+          trigger: everyMin
+          action: CreditMemoJournalAction

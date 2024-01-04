@@ -1,0 +1,3 @@
+extensions:
+  dx/excshell/1:
+    $include: src/ext.config.yaml
