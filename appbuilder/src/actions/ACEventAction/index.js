@@ -58,8 +58,10 @@ async function main(params) {
             type: AC_EVENTS.RETURN,
           },
           token,
-          "fb268d42-683c-4b76-a9ca-946ff2649cf1",
-          "ibm.sterling.adobe.creditmemo_process.v0",
+          params.AIO_EVENTS_CUSTOM_PROVIDER_ID,
+          params.AIO_EVENTS_ORDER_JOURNALLING_EVENT_CODE
+          // "fb268d42-683c-4b76-a9ca-946ff2649cf1",
+          // "ibm.sterling.adobe.creditmemo_process.v0",
         );
         return eventResponse;
       } else {
@@ -70,12 +72,9 @@ async function main(params) {
       //const response = await ACCreditMemo.main(params);
       const token = await getOAuthToken(params);
       const eventResponse = await publishEventGeneric(
-        params,
-        logger,
-        { type: AC_EVENTS.CREDIT_MEMO, params: params },
-        token,
-        "fb268d42-683c-4b76-a9ca-946ff2649cf1",
-        "ibm.sterling.adobe.creditmemo_process.v0",
+        params,        logger,        { type: AC_EVENTS.CREDIT_MEMO, params: params },        token,params.AIO_EVENTS_CUSTOM_PROVIDER_ID,params.AIO_EVENTS_ORDER_JOURNALLING_EVENT_CODE
+        // "fb268d42-683c-4b76-a9ca-946ff2649cf1",
+        // "ibm.sterling.adobe.creditmemo_process.v0",
       );
       return eventResponse;
     } else if (params.type == AC_EVENTS.INVOICE) {

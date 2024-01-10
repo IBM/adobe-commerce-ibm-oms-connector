@@ -94,8 +94,8 @@ async function main(params) {
         "event_receiver_api",
       ],
     };
-    await context.set("ibm.sterling.adobe.creditmemo_process.v0", config);
-    await context.setCurrent("ibm.sterling.adobe.creditmemo_process.v0");
+    await context.set(params.AIO_EVENTS_ORDER_JOURNALLING_EVENT_CODE, config);
+    await context.setCurrent(params.AIO_EVENTS_ORDER_JOURNALLING_EVENT_CODE);
 
     const token = await getOAuthToken(params);
     logger.debug("Token successfully retrieved");

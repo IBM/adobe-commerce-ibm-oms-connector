@@ -1,0 +1,6 @@
+
+appbuilder/dist/
+appbuilder/node_modules
+appbuilder/package-lock.json
+appbuilder/.parcel-cache/data.mdb
+appbuilder/.parcel-cache/lock.mdb
