@@ -88,6 +88,18 @@ async function main(params, log) {
 
       const requestBody = JSON.stringify({
         items: order_obj,
+        tracks: {
+          track_number: params.data.Containers.Container[0].TrackingNo,
+          carrier_code: params.data.Containers.Container[0].SCAC,
+          title:
+            params.data.Containers.Container[0].TrackingNo +
+            " | " +
+            params.data.Containers.Container[0].ContainerNo +
+            " | " +
+            params.data.Containers.Container[0].ContainerScm +
+            " | " +
+            params.data.Containers.Container[0].SCAC,
+        },
         arguments: {
           extension_attributes: {
             source_code: params.data.Shipment.ShipNode,
