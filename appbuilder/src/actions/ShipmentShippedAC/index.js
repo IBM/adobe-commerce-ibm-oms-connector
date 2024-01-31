@@ -78,7 +78,7 @@ async function main(params, log) {
           "selectedOrder[0].ItemID" + JSON.stringify(selectedOrder[0].item_id),
         );
 
-        if (selectedOrder.length > 0) {
+        if (selectedOrder.length > 0 && item.OrderReleaseKey) {
           order_obj.push({
             order_item_id: selectedOrder[0].item_id,
             qty: item.Quantity,
@@ -88,18 +88,21 @@ async function main(params, log) {
 
       const requestBody = JSON.stringify({
         items: order_obj,
-        tracks: {
-          track_number: params.data.Containers.Container[0].TrackingNo,
-          carrier_code: params.data.Containers.Container[0].SCAC,
-          title:
-            params.data.Containers.Container[0].TrackingNo +
-            " | " +
-            params.data.Containers.Container[0].ContainerNo +
-            " | " +
-            params.data.Containers.Container[0].ContainerScm +
-            " | " +
-            params.data.Containers.Container[0].SCAC,
-        },
+        tracks: [
+          {
+            track_number:
+              params.data.Shipment.Containers.Container[0].TrackingNo,
+            carrier_code: params.data.Shipment.Containers.Container[0].SCAC,
+            title:
+              params.data.Shipment.Containers.Container[0].TrackingNo +
+              " | " +
+              params.data.Shipment.Containers.Container[0].ContainerNo +
+              " | " +
+              params.data.Shipment.Containers.Container[0].ContainerScm +
+              " | " +
+              params.data.Shipment.Containers.Container[0].SCAC,
+          },
+        ],
         arguments: {
           extension_attributes: {
             source_code: params.data.Shipment.ShipNode,
