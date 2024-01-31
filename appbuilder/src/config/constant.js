@@ -67,11 +67,9 @@ export const Change_Shipment_Demo_Location = {
 };
 
 export const STATUS_COMMENTS = {
-  ORDER_HOLD: "Order is on HOLD",
-  ORDER_UNHOLD: "Order is back in Pending State",
+  ORDER_UNHOLD: "Order is back into original State",
   ORDER_HOLD:
     "Order is on HOLD because the total cost of the order is more than 500$",
-  ORDER_UNHOLD: "Order is back in Pending State",
   ORDER_INCLUDED_IN_SHIPMENT:
     "Order has been included in shipment in OMS System",
   ORDER_RELEASED: "Order has been released in OMS system",
