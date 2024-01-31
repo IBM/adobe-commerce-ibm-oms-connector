@@ -29,7 +29,7 @@ function App() {
         <div>
           <DeliveryTime
             buttonColor="#1a79c2"
-            webhookURL="https://48941-sterlingomsapp-tenantc.adobeio-static.net/api/v1/web/oms-commerce-appbuilder/deliveryTimeWebhook"
+            webhookURL="https://48941-sterlingomsapp-tenantc.adobeio-static.net/api/v1/web/oms-commerce-appbuilder/"
             ibmOrganizationId="91D55B255640B3AE7F000101@AdobeOrg"
             itemId="3953"
             country="IN"
@@ -59,7 +59,6 @@ function App() {
             organizationId="91D55B255640B3AE7F000101@AdobeOrg"
           />
         </div>
-       
       </div>
     </div>
   );

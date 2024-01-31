@@ -49,7 +49,6 @@ export default class LocationStockStatus extends Component {
       isSourceButtonShow,
       isInstoreButtonShow,
       buttonColor,
-      adobeAPIURL,
       webhookURL,
       adobeAccessToken,
       webhookAccessToken,
@@ -142,7 +141,6 @@ export default class LocationStockStatus extends Component {
 
         {sourceComponent && (
           <SourceLocations
-            adobeAPIURL={adobeAPIURL}
             webhookURL={webhookURL}
             adobeAccessToken={adobeAccessToken}
             webhookAccessToken={webhookAccessToken}
