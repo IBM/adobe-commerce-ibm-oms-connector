@@ -42,14 +42,9 @@ var jsonData = getApiDataJson();
 if (jsonData.length > 0 && jsonData[0].API_CONFIG_DATA)  {
    console.log('api-data');
     var isLoggedin = jsonData[0].customer_data.isLoggedin;
-    var deliveryTimeWebhookurl = jsonData[0].API_CONFIG_DATA.delivery_time_Webhookurl;
     var ibmOrgId = jsonData[0].API_CONFIG_DATA.ibm_org_id;
     var accessToken = jsonData[0].API_CONFIG_DATA.access_token;
-    var adobe_access_token = jsonData[0].API_CONFIG_DATA.adobe_access_token;
-    var adobe_apiurl = jsonData[0].API_CONFIG_DATA.adobe_apiurl;
-    var base_webhookurl = jsonData[0].API_CONFIG_DATA.base_webhookurl;
-    var location_stock_status_Webhookurl = jsonData[0].API_CONFIG_DATA.location_stock_status_Webhookurl;
-     
+    var base_webhookurl = jsonData[0].API_CONFIG_DATA.base_webhookurl; 
 if (isLoggedin === true && jsonData[0].customer_data.shipping_address) {
     console.log('cust login');
     var countryId = jsonData[0].customer_data.shipping_address.country_id;
@@ -61,7 +56,7 @@ if (isLoggedin === true && jsonData[0].customer_data.shipping_address) {
         ReactDOM.render(<React.Suspense fallback={<div dangerouslySetInnerHTML={{__html: element.innerHTML}}/>}>
             <Deliveryinfo originalContent={element.innerHTML} 
             buttonColor="#1a79c2"
-            webhookURL={deliveryTimeWebhookurl}
+            webhookURL={base_webhookurl}
             ibmOrganizationId={ibmOrgId}
             itemId={ItemId}
             country={countryId}

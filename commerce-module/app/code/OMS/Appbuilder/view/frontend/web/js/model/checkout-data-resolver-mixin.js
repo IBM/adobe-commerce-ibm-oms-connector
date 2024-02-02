@@ -29,7 +29,7 @@ define([
                 ) {
                     console.log('pickup');
                     var defaultShipping = 'instore_pickup';
-                    //checkoutData.setSelectedShippingRate(defaultShipping);
+                    checkoutData.setSelectedShippingRate(defaultShipping);
 
                 }
       

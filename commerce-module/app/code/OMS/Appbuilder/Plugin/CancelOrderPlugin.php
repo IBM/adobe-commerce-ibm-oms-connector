@@ -10,8 +10,19 @@ use OMS\Appbuilder\Helper\UtilHelper;
 
 class CancelOrderPlugin
 {
+    /**
+     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     */
     protected $orderRepository;
+
+    /**
+     * @var \Magento\Backend\App\ConfigInterface
+     */
     protected $_config;
+
+     /**
+     * @var UtilHelper
+     */
     private $_util;
 
     public function __construct(
@@ -29,14 +40,13 @@ class CancelOrderPlugin
                                                     $id) {
         $order = $this->orderRepository->get($id);
         if($order -> canCancel() && $order -> getShippingAddress() != null) {
-            
-            $urlPost = $this -> _config -> getValue('omsappbuilder/services/cancel_order_webhookurl');
+            $base_webhookurl = $this -> _config -> getValue('omsappbuilder/services/base_webhookurl');
+            $urlPost = $base_webhookurl.$this -> _config -> getValue('omsappbuilder/services/cancel_order_webhookurl');
             $params = array();
-            $params['data']['DocumentType'] = $this -> _config -> getValue('omsappbuilder/services/DocumentType');
             $params['data']['EnterpriseCode'] = $this -> _config -> getValue('omsappbuilder/services/EnterpriseCode');
             $params['data']['OrderNo'] = $id;
                       
-            $this -> _util -> getCurlResponse($urlPost, $params);
+            $this -> _util -> getCurlResponseOrderCancel($urlPost, $params);
            
         }
         return $id;

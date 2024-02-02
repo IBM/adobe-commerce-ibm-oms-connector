@@ -152,43 +152,6 @@ export default class SourceLocations extends Component {
         }
       }
       console.log("updatedItems", JSON.stringify(updatedItems));
-      // items.forEach((element) => {
-      //   let stockElem = result.PromiseLines.PromiseLine.filter((item) => {
-      //     console.log("stockElem Looping...");
-
-      //     let shipNodeinventory =
-      //       item.Availability.AvailableInventory.ShipNodeAvailableInventory;
-      //     if (shipNodeinventory.Inventory) {
-      //       if (shipNodeinventory.Inventory.length > 0) {
-      //         shipNodeinventory.Inventory.forEach(
-      //           (shipNodeinventoryInventoruy) => {
-      //             if (
-      //               element.source_code === shipNodeinventoryInventoruy.Node
-      //             ) {
-      //               selectedStore = shipNodeinventoryInventoruy;
-      //               return true;
-      //             }
-      //           },
-      //         );
-      //       } else {
-      //         if (element.source_code === shipNodeinventory.Inventory.Node) {
-      //           selectedStore = shipNodeinventory.Inventory;
-      //           return false;
-      //         }
-      //       }
-      //       // if (element.source_code === shipNodeinventory.Inventory.Node) {
-      //       //   return true;
-      //       // }
-      //     }
-      //   });
-      //   console.log("selectedStore :", selectedStore);
-      //   if (selectedStore != null) {
-      //     element["availableQuantity"] = selectedStore.AvailableOnhandQuantity;
-      //   } else {
-      //     element["availableQuantity"] = 0;
-      //   }
-      //   updatedItems.push(element);
-      // });
       this.setState({
         items: updatedItems,
         hasError: false,
@@ -291,13 +254,6 @@ export default class SourceLocations extends Component {
 
                   return (
                     <ListGroup.Item key={item.name}>
-                      {/* <Form.Check
-                        inline
-                        type="radio"
-                        id={item.source_code}
-                        style={{ position: "absolute" }}
-                        onChange={this.setSelectedSource}
-                      /> */}
                       <div style={{ position: "relative", marginLeft: "25px" }}>
                         <h5>{item.name}</h5>
                         <StockWrapper>
@@ -326,11 +282,6 @@ export default class SourceLocations extends Component {
             <Button variant="secondary" onClick={this.props.closeModal}>
               Close
             </Button>
-            {/* {items.length > 0 && selectedSource && (
-              <Button variant="primary" onClick={this.confirmSource}>
-                Confirm
-              </Button>
-            )} */}
           </Modal.Footer>
         </Modal>
       </div>

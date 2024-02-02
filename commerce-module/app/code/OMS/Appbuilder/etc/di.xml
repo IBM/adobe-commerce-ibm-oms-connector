@@ -27,4 +27,7 @@
     <type name="Magento\Sales\Api\OrderManagementInterface">
         <plugin name="unholdOrderPlugin" type="OMS\Appbuilder\Plugin\UnHoldOrderPlugin" sortOrder="1" disabled="false"/>
     </type>
+    <type name="Magento\Sales\Api\OrderManagementInterface">
+        <plugin name="after_place_order_delcookie" type="OMS\Appbuilder\Plugin\DeleteCookiePlugin" sortOrder="1" disabled="false"/>
+    </type>
 </config>

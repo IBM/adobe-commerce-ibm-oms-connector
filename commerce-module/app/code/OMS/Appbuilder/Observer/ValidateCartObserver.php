@@ -35,10 +35,26 @@ class ValidateCartObserver implements ObserverInterface
      * @var Cart
      */
     protected $cart;
+
+    /**
+     * @var \Magento\Backend\App\ConfigInterface
+     */
     protected $_config;
+
+    /**
+     * @var UtilHelper
+     */
     private $_util;
-    //private $_omsReservationHelper;
-    private Logger $logger;
+
+    /**
+     * @var OmsReservationHelper
+     */
+    private $_omsReservationHelper;
+
+    /**
+     * @var Logger
+     */
+    private $logger;
 
     /**
      * @param ManagerInterface $messageManager
@@ -81,12 +97,12 @@ class ValidateCartObserver implements ObserverInterface
         if ($cartItemsQty > 0) {
             $start = microtime(true);
             $this->logger->info("Starting CheckStockBeforeValidateQuote plugin");
-            $urlPost = $this->_config->getValue('omsappbuilder/services/stock_detail_webhookurl');
+            $base_webhookurl = $this -> _config -> getValue('omsappbuilder/services/base_webhookurl');
+            $urlPost = $base_webhookurl.$this->_config->getValue('omsappbuilder/services/stock_detail_webhookurl');
 
             $items = [];
             $reservationItems = [];
             $index = 0;
-            $getOneSku = '';
 
             foreach ($quote->getItems() as $quoteitem) {
                 $item = [
@@ -103,7 +119,6 @@ class ValidateCartObserver implements ObserverInterface
 
                 $items[] = $item;
                 $reservationItems[] = $item_reservation;
-                $getOneSku = $quoteitem->getSku();
                 $index++;
             }
 
@@ -161,7 +176,7 @@ class ValidateCartObserver implements ObserverInterface
                     if($SourceNode !== null) 
                     {
                         $quoteId = $quote->getId();
-                        $reservationWebhookPostUrl = $this->_config->getValue('omsappbuilder/services/reservation_oms_webhookurl');
+                        $reservationWebhookPostUrl = $base_webhookurl.$this->_config->getValue('omsappbuilder/services/reservation_oms_webhookurl');
                         $enterpriseCode = $this->_config->getValue('omsappbuilder/services/EnterpriseCode');
 
                         $reservationParams = [

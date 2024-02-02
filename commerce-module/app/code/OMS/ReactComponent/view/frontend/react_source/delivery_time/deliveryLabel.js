@@ -45,7 +45,7 @@ export default class DeliveryLabel extends Component {
       ItemID: itemId,
       RequiredQty: requiredQty,
     };
-    const url = webhookURL;
+    const url = webhookURL + "deliveryTimeWebhook";
     const request = await fetch(url, {
       method: "POST",
       headers: {

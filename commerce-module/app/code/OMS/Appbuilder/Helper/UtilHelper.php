@@ -8,17 +8,18 @@ declare(strict_types=1);
 namespace OMS\Appbuilder\Helper;
 use Exception;
 
-class OmsException extends Exception {
-    public function errorMessage() {
-        $errorMsg = 'Error on line '.$this->getLine().' in '.$this->getFile()
-            .': <b>'.$this->getMessage();
-        return $errorMsg;
-    }
-}
 class UtilHelper
 {
+    /**
+     * @var \Magento\Backend\App\ConfigInterface
+     */
     protected $_config;
+
+     /**
+     * @var Logger
+     */
     protected $_logger;
+
     public function __construct(
         \Magento\Backend\App\ConfigInterface $config,
         \OMS\Appbuilder\Logger\Logger $logger
@@ -101,7 +102,7 @@ class UtilHelper
         }
     } 
     
-    public function getCurlResponse($url, $reqObj) {
+    public function getCurlResponseOrderCancel($url, $reqObj) {
         
         /*  Custom Logger */
         $this->_logger -> info("getCurlResponse method starting\n");
@@ -109,6 +110,7 @@ class UtilHelper
         $this->_logger -> info("Request URL ======>\n" . $url . "");
          /* End  Custom Logger */
         $accessToken = $this ->getAccessToken();
+        $xgwimsorgid = $this -> _config -> getValue('omsappbuilder/connection/x-gw-ims-org-id');
         $ch = curl_init();
         $request = json_encode($reqObj);
         $ch = curl_init();
@@ -116,6 +118,7 @@ class UtilHelper
             "Content-Type: application/json",
             "Authorization: Bearer $accessToken",
             "Access-Control-Request-Headers" => "XRequested-With",
+            "x-gw-ims-org-id: $xgwimsorgid",
             "AccessControl-Allow-Origin" => "*",
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_SSL_VERIFYPEER=>true, CURLOPT_SSL_VERIFYHOST=>true);
@@ -129,9 +132,13 @@ class UtilHelper
         $status = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
         $this->_logger -> info("Curl Response Status code======>\n" . $status);
         $this->_logger -> info("Response Body ======>\n" . $res);
-
+        
+        // Check if $res is a string
+        if (!is_string($res)) {
+            $this->_logger->error("Response is not a string");
+            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid response received.'));
+        }
         $response_json = json_decode($res);
-        $this->_logger -> info("Response  ======>\n" . print_r($response_json));
         if (empty($response_json)) {
             $this->_logger -> info("Response object is empty");
             $response_json = new Json();
@@ -143,25 +150,21 @@ class UtilHelper
             $this->_logger->error("Not getting response code in between 200 to 299");
             $errMsg = "Internal Server Error";
             try{
-                foreach($response_json -> errors as $row) {
-                    foreach($row as $key => $val) {
-                        if($key == 'error_description'){
-                            $errMsg = $val;
-                        }
-                    }
+                if(isset($response_json -> error)) {
+                    $errMsg = $response_json -> error;
                 }
             }catch (\Exception $e) {
                 $this->_logger->error("Got Exception while featching the error msg for failed request ======>".$e->getMessage());
             }
-            $this->_logger->info("Response Error Msg ======>".$errMsg);
-            throw new OmsException($errMsg);
+            $this->_logger->info("Order Cancel OMS API Response Error Msg ======>".$errMsg);
+            throw new \Magento\Framework\Exception\LocalizedException(__('%1', "Order Cancel OMS API Response Error::".$errMsg));
+            
         } 
         if($response_json->CancelAllowed === false){
 
             throw new \Magento\Framework\Exception\LocalizedException(__('%1', $response_json->message));
         }
-        return $response_json;
-
+    
     }
 
 
@@ -196,13 +199,10 @@ class UtilHelper
         $status = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
         $this->_logger -> info("Curl stock Response Status code======>\n" . $status);
         $this->_logger -> info("Response stock Body ======>\n" . $res);
-
-        $response_json = json_decode($res);
-        if (empty($response_json)) {
+        if (empty($res)) {
             $this->_logger -> info("Stock Response object is empty");
-            $response_json = new Json();
         }
-        $response_json -> CurlStatus = $status;
+       
         curl_close($ch);
         if(!($status >= 200 && $status <= 299)){
            
@@ -286,7 +286,12 @@ class UtilHelper
     $status = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
     $this->_logger -> info("Order Unhold Curl Response Status code======>\n" . $status);
     $this->_logger -> info("Order Unhold Response Body ======>\n" . $res);
-   
+    
+    // Check if $res is a string
+     if (!is_string($res)) {
+        $this->_logger->error("Response is not a string");
+        throw new \Magento\Framework\Exception\LocalizedException(__('Invalid response received.'));
+    }
     $response_json = json_decode($res);
     if (empty($response_json)) {
         $this->_logger -> info("Order Unhold Response object is empty");
@@ -299,24 +304,19 @@ class UtilHelper
         $this->_logger->error("Order Unhold Not getting response code in between 200 to 299");
         $errMsg = "Internal Server Error";
         try{
-            foreach($response_json -> errors as $row) {
-                foreach($row as $key => $val) {
-                    if($key == 'ErrorDescription'){
-                        $errMsg = $val;
-                    }
-                }
+            if(isset($response_json -> error)) {
+                $errMsg = $response_json -> error;
             }
         }catch (\Exception $e) {
             $this->_logger->error("Got Exception while featching for unhold api the error msg for failed request ======>".$e->getMessage());
         }
         $this->_logger->info("Order Unhold Response Error Msg ======>".$errMsg);
-        throw new OmsException($errMsg);
+        throw new \Magento\Framework\Exception\LocalizedException(__('%1', "Order Unhold OMS Response Error::".$errMsg));
     } 
     if($response_json->success === false){
 
         throw new \Magento\Framework\Exception\LocalizedException(__('%1', $response_json->message));
     }
-    return $response_json;
 
 }
     

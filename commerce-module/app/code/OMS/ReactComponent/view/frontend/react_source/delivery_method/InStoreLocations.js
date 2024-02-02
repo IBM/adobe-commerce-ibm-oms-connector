@@ -142,38 +142,6 @@ export default class InStoreLocations extends Component {
           }
         }
       }
-      // items.forEach((element) => {
-      //   console.log(
-      //     "result.PromiseLines.PromiseLine",
-      //     JSON.stringify(result.PromiseLines.PromiseLine),
-      //   );
-      //   let stockElem = result.PromiseLines.PromiseLine.filter((item) => {
-      //     let shipNodeinventory =
-      //       item.Availability.AvailableInventory.ShipNodeAvailableInventory;
-      //     if (shipNodeinventory.Inventory) {
-      //       shipNodeinventory.Inventory.forEach(
-      //         (shipNodeinventoryInventoruy) => {
-      //           if (element.source_code === shipNodeinventoryInventoruy.Node) {
-      //             selectedStore = shipNodeinventoryInventoruy;
-      //             return true;
-      //           }
-      //         },
-      //       );
-
-      //       // if (element.source_code === shipNodeinventory.Inventory.Node) {
-      //       //   return true;
-      //       // }
-      //     }
-      //   });
-      //   console.log("selectedStore", JSON.stringify(selectedStore));
-
-      //   if (selectedStore != null) {
-      //     element["availableQuantity"] = selectedStore.AvailableOnhandQuantity;
-      //   } else {
-      //     element["availableQuantity"] = 0;
-      //   }
-      //   updatedItems.push(element);
-      // });
 
       this.setState({
         items: updatedItems,

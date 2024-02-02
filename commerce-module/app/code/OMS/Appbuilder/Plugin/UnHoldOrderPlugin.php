@@ -10,8 +10,20 @@ use OMS\Appbuilder\Helper\UtilHelper;
 
 class UnHoldOrderPlugin
 {
+  
+    /**
+     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     */
     protected $orderRepository;
+
+    /**
+     * @var \Magento\Backend\App\ConfigInterface
+     */
     protected $_config;
+
+     /**
+     * @var UtilHelper
+     */
     private $_util;
 
     public function __construct(
@@ -27,8 +39,8 @@ class UnHoldOrderPlugin
     public function beforeUnHold(\Magento\Sales\Api\OrderManagementInterface $subject,$id) {
         $order = $this->orderRepository->get($id);
         if($order -> canUnhold()) {
-            
-            $urlPost = $this -> _config -> getValue('omsappbuilder/services/orderunhold_webhookurl');
+            $base_webhookurl = $this -> _config -> getValue('omsappbuilder/services/base_webhookurl');
+            $urlPost = $base_webhookurl.$this -> _config -> getValue('omsappbuilder/services/orderunhold_webhookurl');
             $params = array();
             
             $params['HoldType'] = 'Commerce_Hold';

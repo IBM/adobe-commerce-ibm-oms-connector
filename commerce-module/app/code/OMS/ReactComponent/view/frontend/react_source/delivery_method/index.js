@@ -45,10 +45,12 @@ export default class DeliveryMethod extends Component {
       inStoreComponent: false,
     });
   };
+
   componentDidMount() {
     const storedValue = window.localStorage.getItem("DELIVERY_METHOD");
     document.cookie = "reactDeliveryMethod=" + storedValue;
     const selectedStoreItem = window.localStorage.getItem("SELECTED_STORE");
+
     if (storedValue) {
       this.setState({ selectedDeliveryMethod: storedValue });
     }
@@ -60,6 +62,7 @@ export default class DeliveryMethod extends Component {
     console.log(storedValue, selectedStoreItem);
     // alert(storedValue)
   }
+
   closeModal = () => {
     this.setState({
       inStoreComponent: false,
@@ -126,16 +129,6 @@ export default class DeliveryMethod extends Component {
               onSelectionChange={this.setSelectedSource}
             >
               {this.state.deliveryList.map((item) => {
-                // let displayAddress = `${item.street ? item.street : ""}
-                //                         ${item.city ? item.city : ""} ${
-                //   item.region ? item.region : ""
-                // }
-                //                         ${
-                //                           item.country_id ? item.country_id : ""
-                //                         } ${
-                //   item.postcode ? item.postcode : ""
-                // }`;
-
                 return (
                   <ListGroup.Item key={item.name}>
                     <div class="row">
@@ -145,15 +138,6 @@ export default class DeliveryMethod extends Component {
                           backgroundColor: "transparent",
                         }}
                       >
-                        {/* <Form.Group controlId="kindOfStand">
-                          <Form.Check
-                            inline
-                            type="radio"
-                            id={item.source_code}
-                            style={{ alignSelf: "center" }}
-                            onChange={this.setSelectedSource}
-                          />
-                        </Form.Group> */}
                         <input
                           onChange={() => {
                             this.setState({
@@ -225,21 +209,6 @@ export default class DeliveryMethod extends Component {
                         )}
                       </div>
                     </div>
-
-                    {/* <Form.Check
-                      inline
-                      type="radio"
-                      id={item.source_code}
-                      style={{ position: "absolute" }}
-                      onChange={this.setSelectedSource}
-                    />
-                    <div style={{ position: "relative", marginLeft: "25px" }}>
-                      <h5>{item.name}</h5>
-                      <StockWrapper>
-                        <div className="stock-label">{item.name}</div>
-                      </StockWrapper>
-                    </div>
-                    <p slot="description">{item.subTitle} </p> */}
                   </ListGroup.Item>
                 );
               })}
