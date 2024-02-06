@@ -88,7 +88,9 @@ async function isTokenAvailable(isAdmin) {
   const token = isAdmin
     ? await get(CONFIG.OMS_ADMIN_TOKEN_NAME)
     : await get(CONFIG.OMS_TOKEN_NAME);
-  if (token != undefined) {
+  const orgId = await get(CONFIG.OMS_ORG);
+
+  if (token != undefined && orgId != undefined) {
     return true;
   } else {
     return false;
