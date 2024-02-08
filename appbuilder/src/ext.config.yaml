@@ -11,7 +11,7 @@ runtimeManifest:
       actions:
         generic:
           function: actions/generic/index.js
-          web: "no"
+          web: "yes"
           runtime: nodejs:16
           inputs:
             LOG_LEVEL: debug
@@ -20,7 +20,7 @@ runtimeManifest:
             OMS_USERNAME: $OMS_USERNAME
             OMS_PASSWORD: $OMS_PASSWORD
           annotations:
-            require-adobe-auth: false
+            require-adobe-auth: true
             final: true
           include:
             - - files/*.p12
@@ -40,11 +40,11 @@ runtimeManifest:
             - - files/*.p12
               - secrets/
           annotations:
-            require-adobe-auth: true
+            require-adobe-auth: false
             final: true
         OMSTest:
           function: actions/OMSTest/index.js
-          web: "no"
+          web: "yes"
           runtime: nodejs:16
           inputs:
             LOG_LEVEL: debug
@@ -71,6 +71,12 @@ runtimeManifest:
             COMMERCE_ACCESS_TOKEN_SECRET: $COMMERCE_ACCESS_TOKEN_SECRET
             SCHEDULE_MINUTES_HOLD_OMS: $SCHEDULE_MINUTES_HOLD_OMS
             PAYMENT_AUTHORIZATION_SPAN: $PAYMENT_AUTHORIZATION_SPAN
+          annotations:
+            require-adobe-auth: true
+            final: true
+          include:
+            - - files/*.p12
+              - secrets/
         ShipmentChangeOMS:
           function: actions/ShipmentChangeOMS/index.js
           web: "yes"
@@ -108,7 +114,7 @@ runtimeManifest:
             - - files/*.p12
               - secrets/
           annotations:
-            require-adobe-auth: true
+            require-adobe-auth: false
             final: true
         StockDetailOMS:
           function: actions/StockDetailOMS/index.js
@@ -124,7 +130,7 @@ runtimeManifest:
             - - files/*.p12
               - secrets/
           annotations:
-            require-adobe-auth: true
+            require-adobe-auth: false
             final: true
         CarrierWebhook:
           function: actions/CarrierWebhook/index.js
@@ -284,7 +290,7 @@ runtimeManifest:
             - - files/*.p12
               - secrets/
           annotations:
-            require-adobe-auth: true
+            require-adobe-auth: false
             final: true
         BackOrderCancelWebhook:
           function: actions/BackOrderCancelWebhook/index.js
@@ -293,7 +299,7 @@ runtimeManifest:
           inputs:
             LOG_LEVEL: debug
           annotations:
-            require-adobe-auth: true
+            require-adobe-auth: false
             final: true
         ACSourceWebhook:
           function: actions/ACSourceWebhook/index.js
@@ -389,7 +395,7 @@ runtimeManifest:
             - - files/*.p12
               - secrets/
           annotations:
-            require-adobe-auth: true
+            require-adobe-auth: false
             final: true
       triggers:
         everyMin:
