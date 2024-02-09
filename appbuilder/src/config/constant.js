@@ -152,3 +152,7 @@ export const API_TEMPLATE = {
   CREATE_ORDER_INVOICE: "&_templateKey=def_createOrdInvoice_01",
   RECORD_INVOICE_CREATION: "&_templateKey=def_recInvoiceCreate_01",
 };
+
+export const PRODUCT_TYPE = {
+  CONFIGURABLE: "configurable",
+};
