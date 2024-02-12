@@ -86,29 +86,43 @@ async function main(params, log) {
         }
       });
 
-      const requestBody = JSON.stringify({
+      let requestBody = JSON.stringify({
         items: order_obj,
-        tracks: [
-          {
-            track_number:
-              params.data.Shipment.Containers.Container[0].TrackingNo,
-            carrier_code: params.data.Shipment.Containers.Container[0].SCAC,
-            title:
-              params.data.Shipment.Containers.Container[0].TrackingNo +
-              " | " +
-              params.data.Shipment.Containers.Container[0].ContainerNo +
-              " | " +
-              params.data.Shipment.Containers.Container[0].ContainerScm +
-              " | " +
-              params.data.Shipment.Containers.Container[0].SCAC,
-          },
-        ],
         arguments: {
           extension_attributes: {
             source_code: params.data.Shipment.ShipNode,
           },
         },
       });
+      if (
+        params.data.Shipment.Containers &&
+        params.data.Shipment.Containers.Container &&
+        params.data.Shipment.Containers.Container[0].TrackingNo
+      ) {
+        requestBody = JSON.stringify({
+          items: order_obj,
+          tracks: [
+            {
+              track_number: params.data.Shipment.Containers.Container[0]
+                .TrackingNo
+                ? params.data.Shipment.Containers.Container[0].TrackingNo
+                : "",
+              carrier_code: params.data.Shipment.Containers.Container[0].SCAC
+                ? params.data.Shipment.Containers.Container[0].SCAC
+                : "",
+              title: params.data.Shipment.Containers.Container[0].SCAC
+                ? params.data.Shipment.Containers.Container[0].SCAC
+                : "",
+            },
+          ],
+          arguments: {
+            extension_attributes: {
+              source_code: params.data.Shipment.ShipNode,
+            },
+          },
+        });
+      }
+
       logger.info("requestBody" + JSON.stringify(requestBody));
       if (adobeOrderDetails.statusCode == 404) {
         await remove(isShipmentProcessKey);
