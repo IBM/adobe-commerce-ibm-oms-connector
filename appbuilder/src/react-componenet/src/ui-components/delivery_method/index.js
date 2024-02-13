@@ -163,12 +163,12 @@ export default class DeliveryMethod extends Component {
                           type="radio"
                           id={item.id}
                           name="storeSelection"
-                          checked={
-                            this.state.selectedDeliveryMethod == item.id ||
-                            selectedPickup
-                              ? "checked"
-                              : ""
-                          }
+                          // checked={
+                          //   this.state.selectedDeliveryMethod == item.id ||
+                          //   selectedPickup
+                          //     ? "checked"
+                          //     : ""
+                          // }
                         />
                         {/* <h2>{item.name}</h2>
                         <p>{item.subTitle}</p> */}
