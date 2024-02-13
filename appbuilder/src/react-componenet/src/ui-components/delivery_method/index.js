@@ -30,7 +30,7 @@ export default class DeliveryMethod extends Component {
         },
       ],
       inStoreComponent: false,
-      selectedDeliveryMethod: 1,
+      selectedDeliveryMethod: -1,
       selectedPickup: null,
     };
   }
@@ -46,21 +46,31 @@ export default class DeliveryMethod extends Component {
   };
 
   componentDidMount() {
-    const storedValue = window.localStorage.getItem("DELIVERY_METHOD");
-    document.cookie = "reactDeliveryMethod=" + storedValue;
-    const selectedStoreItem = window.localStorage.getItem("SELECTED_STORE");
-
-    if (storedValue) {
-      this.setState({ selectedDeliveryMethod: storedValue });
-    }
-    if (selectedStoreItem) {
-      const store = JSON.parse(selectedStoreItem);
-      this.setState({ selectedPickup: store });
-      document.cookie = "reactSelectedStore=" + store.source_code;
-    }
-    console.log(storedValue, selectedStoreItem);
-    // alert(storedValue)
+    //TODO: Below code is removed , but we can use this for future if we wanted to have default value selected on page load
+    // const storedValue = window.localStorage.getItem("DELIVERY_METHOD");
+    // document.cookie = "reactDeliveryMethod=" + storedValue;
+    // const selectedStoreItem = window.localStorage.getItem("SELECTED_STORE");
+    // if (storedValue) {
+    //   this.setState({ selectedDeliveryMethod: storedValue });
+    // }
+    // if (selectedStoreItem) {
+    //   const store = JSON.parse(selectedStoreItem);
+    //   this.setState({ selectedPickup: store });
+    //   document.cookie = "reactSelectedStore=" + store.source_code;
+    // }
+    console.log("componentDidMount");
+    this.setCookie("reactSelectedStore", "", 0);
+    this.setCookie("reactDeliveryMethod", "", 0);
+    window.localStorage.removeItem("SELECTED_STORE");
+    window.localStorage.removeItem("DELIVERY_METHOD");
   }
+
+  setCookie = (name, val) => {
+    var d = new Date();
+    d.setTime(d.getTime() + 0 * 60 * 1000);
+    var expires = "expires=" + d.toUTCString();
+    document.cookie = name + "=" + val + ";" + expires + ";path=/";
+  };
 
   closeModal = () => {
     this.setState({
