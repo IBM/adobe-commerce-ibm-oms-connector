@@ -7,7 +7,7 @@ const {
   getOrderItemDetails,
   getOauth,
 } = require("../services/AdobeCommerceService");
-
+const { PRODUCT_TYPE } = require("../config/constant");
 async function prepareOrderStatusChangeResponse(data) {
   return {
     commentSaved: data,
@@ -124,65 +124,67 @@ async function createOrderPayload(
     let bundleParentDetail = [];
 
     items.map((item) => {
-      let orderLinePayload = {
-        PrimeLineNo: PrimeLineNoIndex,
-        SubLineNo: 1,
-        OrderedQty: item.qty_ordered,
-        EarliestScheduleDate: time.format("YYYY-MM-DD[T]HH:mm:ss"),
-        Item: {
-          ItemID: item.product_id,
-          CostCurrency: order_currency_code,
-          UnitOfMeasure: "EACH", //Need to check
-        },
-        LinePriceInfo: {
-          // UnitPrice: item.price - item.discount_amount / item.qty_ordered,
-          UnitPrice: item.price,
-          IsPriceLocked: item.has_children ? "N" : "Y",
-        },
-      };
-
-      if (item.product_type == "bundle") {
-        bundleParentDetail.push({ id: item.id, primeLine: PrimeLineNoIndex });
-      }
-      console.log("bundleParentDetail ", JSON.stringify(bundleParentDetail));
-
-      // if (productType == "bundle" && item.product_type == "simple") {
-      let selectedItem = bundleParentDetail.filter(
-        (i) => i.id == item.parent_item_id,
-      );
-      console.log("selectedItem bundle", JSON.stringify(selectedItem));
-      if (selectedItem.length > 0) {
-        orderLinePayload["BundleParentLine"] = {
-          OrderLineKey: "",
-          PrimeLineNo: selectedItem[0].primeLine,
+      if (item.product_type != PRODUCT_TYPE.CONFIGURABLE) {
+        let orderLinePayload = {
+          PrimeLineNo: PrimeLineNoIndex,
           SubLineNo: 1,
-          TransactionalLineId: "",
+          OrderedQty: item.qty_ordered,
+          EarliestScheduleDate: time.format("YYYY-MM-DD[T]HH:mm:ss"),
+          Item: {
+            ItemID: item.product_id,
+            CostCurrency: order_currency_code,
+            UnitOfMeasure: "EACH", //Need to check
+          },
+          LinePriceInfo: {
+            // UnitPrice: item.price - item.discount_amount / item.qty_ordered,
+            UnitPrice: item.price,
+            IsPriceLocked: item.has_children ? "N" : "Y",
+          },
         };
-      }
-      //}
-      //  else {
-      //   orderLinePayload["PrimeLineNo"] = 1;
-      //   orderLinePayload["SubLineNo"] = 1;
-      // }
 
-      if (params.reservationId) {
-        (orderLinePayload["OrderLineReservations"] = {
-          OrderLineReservation: [
-            {
-              ItemID: item.product_id,
-              Quantity: item.qty_ordered,
-              Node: params.nodeId,
-              ReservationID: params.reservationId,
-              UnitOfMeasure: "EACH",
-            },
-          ],
-        }),
-          (orderLinePayload["ShipNode"] = params.nodeId),
-          (orderLinePayload["DeliveryMethod"] = "PICK");
-      }
+        if (item.product_type == "bundle") {
+          bundleParentDetail.push({ id: item.id, primeLine: PrimeLineNoIndex });
+        }
+        console.log("bundleParentDetail ", JSON.stringify(bundleParentDetail));
 
-      OrderLine.push(orderLinePayload);
-      PrimeLineNoIndex++;
+        // if (productType == "bundle" && item.product_type == "simple") {
+        let selectedItem = bundleParentDetail.filter(
+          (i) => i.id == item.parent_item_id,
+        );
+        console.log("selectedItem bundle", JSON.stringify(selectedItem));
+        if (selectedItem.length > 0) {
+          orderLinePayload["BundleParentLine"] = {
+            OrderLineKey: "",
+            PrimeLineNo: selectedItem[0].primeLine,
+            SubLineNo: 1,
+            TransactionalLineId: "",
+          };
+        }
+        //}
+        //  else {
+        //   orderLinePayload["PrimeLineNo"] = 1;
+        //   orderLinePayload["SubLineNo"] = 1;
+        // }
+
+        if (params.reservationId) {
+          (orderLinePayload["OrderLineReservations"] = {
+            OrderLineReservation: [
+              {
+                ItemID: item.product_id,
+                Quantity: item.qty_ordered,
+                Node: params.nodeId,
+                ReservationID: params.reservationId,
+                UnitOfMeasure: "EACH",
+              },
+            ],
+          }),
+            (orderLinePayload["ShipNode"] = params.nodeId),
+            (orderLinePayload["DeliveryMethod"] = "PICK");
+        }
+
+        OrderLine.push(orderLinePayload);
+        PrimeLineNoIndex++;
+      }
     });
     console.log("OrderLine: ", JSON.stringify(OrderLine));
 

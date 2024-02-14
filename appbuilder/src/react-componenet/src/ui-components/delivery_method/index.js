@@ -30,7 +30,7 @@ export default class DeliveryMethod extends Component {
         },
       ],
       inStoreComponent: false,
-      selectedDeliveryMethod: 1,
+      selectedDeliveryMethod: -1,
       selectedPickup: null,
     };
   }
@@ -46,21 +46,31 @@ export default class DeliveryMethod extends Component {
   };
 
   componentDidMount() {
-    const storedValue = window.localStorage.getItem("DELIVERY_METHOD");
-    document.cookie = "reactDeliveryMethod=" + storedValue;
-    const selectedStoreItem = window.localStorage.getItem("SELECTED_STORE");
-
-    if (storedValue) {
-      this.setState({ selectedDeliveryMethod: storedValue });
-    }
-    if (selectedStoreItem) {
-      const store = JSON.parse(selectedStoreItem);
-      this.setState({ selectedPickup: store });
-      document.cookie = "reactSelectedStore=" + store.source_code;
-    }
-    console.log(storedValue, selectedStoreItem);
-    // alert(storedValue)
+    //TODO: Below code is removed , but we can use this for future if we wanted to have default value selected on page load
+    // const storedValue = window.localStorage.getItem("DELIVERY_METHOD");
+    // document.cookie = "reactDeliveryMethod=" + storedValue;
+    // const selectedStoreItem = window.localStorage.getItem("SELECTED_STORE");
+    // if (storedValue) {
+    //   this.setState({ selectedDeliveryMethod: storedValue });
+    // }
+    // if (selectedStoreItem) {
+    //   const store = JSON.parse(selectedStoreItem);
+    //   this.setState({ selectedPickup: store });
+    //   document.cookie = "reactSelectedStore=" + store.source_code;
+    // }
+    console.log("componentDidMount");
+    this.setCookie("reactSelectedStore", "", 0);
+    this.setCookie("reactDeliveryMethod", "", 0);
+    window.localStorage.removeItem("SELECTED_STORE");
+    window.localStorage.removeItem("DELIVERY_METHOD");
   }
+
+  setCookie = (name, val) => {
+    var d = new Date();
+    d.setTime(d.getTime() + 0 * 60 * 1000);
+    var expires = "expires=" + d.toUTCString();
+    document.cookie = name + "=" + val + ";" + expires + ";path=/";
+  };
 
   closeModal = () => {
     this.setState({
@@ -153,12 +163,12 @@ export default class DeliveryMethod extends Component {
                           type="radio"
                           id={item.id}
                           name="storeSelection"
-                          checked={
-                            this.state.selectedDeliveryMethod == item.id ||
-                            selectedPickup
-                              ? "checked"
-                              : ""
-                          }
+                          // checked={
+                          //   this.state.selectedDeliveryMethod == item.id ||
+                          //   selectedPickup
+                          //     ? "checked"
+                          //     : ""
+                          // }
                         />
                         {/* <h2>{item.name}</h2>
                         <p>{item.subTitle}</p> */}
@@ -171,22 +181,26 @@ export default class DeliveryMethod extends Component {
                         <p>{item.subTitle}</p>
                         {item.id == 2 ? (
                           <div>
-                            <Button
-                              variant="link"
-                              style={{
-                                marginTop: -20,
-                                marginLeft: -10,
-                                float: "left",
-                                padding: "10px",
-                              }}
-                              onClick={() =>
-                                this.setState({ inStoreComponent: true })
-                              }
-                            >
-                              {selectedPickup
-                                ? "Change Store"
-                                : "Select your store"}
-                            </Button>
+                            {this.state.selectedDeliveryMethod == 2 ? (
+                              <Button
+                                variant="link"
+                                style={{
+                                  marginTop: -20,
+                                  marginLeft: -10,
+                                  float: "left",
+                                  padding: "10px",
+                                }}
+                                onClick={() =>
+                                  this.setState({ inStoreComponent: true })
+                                }
+                              >
+                                {selectedPickup
+                                  ? "Change Store"
+                                  : "Select your store"}
+                              </Button>
+                            ) : (
+                              <div />
+                            )}
                             <div
                               style={{
                                 marginTop: -20,
