@@ -181,22 +181,26 @@ export default class DeliveryMethod extends Component {
                         <p>{item.subTitle}</p>
                         {item.id == 2 ? (
                           <div>
-                            <Button
-                              variant="link"
-                              style={{
-                                marginTop: -20,
-                                marginLeft: -10,
-                                float: "left",
-                                padding: "10px",
-                              }}
-                              onClick={() =>
-                                this.setState({ inStoreComponent: true })
-                              }
-                            >
-                              {selectedPickup
-                                ? "Change Store"
-                                : "Select your store"}
-                            </Button>
+                            {this.state.selectedDeliveryMethod == 2 ? (
+                              <Button
+                                variant="link"
+                                style={{
+                                  marginTop: -20,
+                                  marginLeft: -10,
+                                  float: "left",
+                                  padding: "10px",
+                                }}
+                                onClick={() =>
+                                  this.setState({ inStoreComponent: true })
+                                }
+                              >
+                                {selectedPickup
+                                  ? "Change Store"
+                                  : "Select your store"}
+                              </Button>
+                            ) : (
+                              <div />
+                            )}
                             <div
                               style={{
                                 marginTop: -20,
