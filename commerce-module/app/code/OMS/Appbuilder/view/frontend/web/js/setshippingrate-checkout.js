@@ -15,7 +15,8 @@ require([
     }
 
     $(document).ready(function () {
-        console.log('set shipping script loaded');
+        console.log('Home delivery set');
+        updateSelectedShippingRate(null);
         $(document).on('click', 'input[type=radio]', function() {
             console.log('Delivery method clicked');
             // Get the clicked radio button
