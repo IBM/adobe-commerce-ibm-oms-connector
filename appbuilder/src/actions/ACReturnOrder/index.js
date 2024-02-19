@@ -64,7 +64,7 @@ async function main(params) {
     const oauth = await getOauth(params, logger);
 
     // 'info' is the default level if not set
-    logger.info("Calling the main action 23332323", params.data.value);
+    logger.info("Calling the main action 23332323 : " + params.data.value);
 
     // log parameters, only if params.LOG_LEVEL === 'debu'g
     // logger.debug(stringParameters(params));
@@ -89,12 +89,7 @@ async function main(params) {
         adobeOrderDetails[0].shipping_incl_tax,
         adobeOrderDetails[0].discount_amount,
       );
-      await logger.info(
-        "returnPayload" + JSON.stringify(returnPayload),
-        "params",
-        "info",
-        "debug",
-      );
+      await logger.info("returnPayload" + JSON.stringify(returnPayload));
       const orderResponse = await createOrderAPI(
         params,
         userDetails,
@@ -114,12 +109,7 @@ async function main(params) {
         "authorized",
         logger,
       );
-      await logger.info(
-        "status payload" + JSON.stringify(statusPayload),
-        "getOrder",
-        "info",
-        "debug",
-      );
+      await logger.info("status payload" + JSON.stringify(statusPayload));
       const changeOrderResponse = await changeOrderStatus(
         params,
         userDetails,

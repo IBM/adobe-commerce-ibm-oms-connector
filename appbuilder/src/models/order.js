@@ -525,28 +525,60 @@ async function returnOrderPayload(
       OrderStatuses,
     } = omsOrderDetails;
     const OrderLine = [];
+    console.log("omsOrderDetails " + JSON.stringify(omsOrderDetails));
 
     const oauth = await getOauth(params, logger);
     const orderItems = await getOrderItemDetails(oauth, order_id);
+    console.log("orderItems " + JSON.stringify(orderItems));
+
     items.map(async (item) => {
       const itemDetails = orderItems.filter(
         (line) => line.item_id == item.order_item_id,
       );
-      const lineItem = OrderLines.OrderLine.filter(
-        (line) => line.Item.ItemID == itemDetails[0].product_id,
-      );
-      const ShipNode = OrderStatuses.OrderStatus.filter(
-        (line) => line.OrderLineKey == lineItem[0].OrderLineKey,
-      )[0].ShipNode;
-      let orderLinePayload = {
-        OrderedQty: item.qty_requested,
-        ReturnReason: item.reason,
-        DerivedFrom: {
-          OrderLineKey: lineItem[0].OrderLineKey,
-        },
-        ShipNode,
-      };
-      OrderLine.push(orderLinePayload);
+      console.log("itemDetails " + JSON.stringify(itemDetails));
+      if (itemDetails[0].product_type == "bundle") {
+        orderItems.map(async (orderItem) => {
+          if (item.product_type != "bundle") {
+            const lineItem = OrderLines.OrderLine.filter(
+              (line) => line.Item.ItemID == orderItem.product_id,
+            );
+            console.log("lineItem " + JSON.stringify(lineItem));
+
+            const ShipNode = OrderStatuses.OrderStatus.filter(
+              (line) => line.OrderLineKey == lineItem[0].OrderLineKey,
+            )[0].ShipNode;
+            let orderLinePayload = {
+              OrderedQty: item.qty_requested,
+              ReturnReason: item.reason,
+              DerivedFrom: {
+                OrderLineKey: lineItem[0].OrderLineKey,
+              },
+              ShipNode,
+            };
+            OrderLine.push(orderLinePayload);
+            console.log("orderLinePayload " + JSON.stringify(orderLinePayload));
+          }
+        });
+      } else {
+        const lineItem = OrderLines.OrderLine.filter(
+          (line) => line.Item.ItemID == itemDetails[0].product_id,
+        );
+        console.log("lineItem " + JSON.stringify(lineItem));
+
+        const ShipNode = OrderStatuses.OrderStatus.filter(
+          (line) => line.OrderLineKey == lineItem[0].OrderLineKey,
+        )[0].ShipNode;
+        let orderLinePayload = {
+          OrderedQty: item.qty_requested,
+          ReturnReason: item.reason,
+          DerivedFrom: {
+            OrderLineKey: lineItem[0].OrderLineKey,
+          },
+          ShipNode,
+        };
+        OrderLine.push(orderLinePayload);
+        console.log("orderLinePayload " + JSON.stringify(orderLinePayload));
+      }
     });
     let payload = {
       OrderNo: entity_id,
@@ -576,6 +608,8 @@ async function returnOrderPayload(
         ],
       },
     };
+    console.log("payload " + JSON.stringify(payload));
+
     return payload;
   } catch (e) {
     let response = {
@@ -603,17 +637,33 @@ async function changeOrderStatusPayload(params, omsOrderDetails, key, logger) {
       const itemDetails = orderItems.filter(
         (line) => line.item_id == item.order_item_id,
       );
-
-      const lineItem = OrderLines.OrderLine.filter(
-        (line) => line.Item.ItemID == itemDetails[0].product_id,
-      );
-      let orderLinePayload = {
-        BaseDropStatus,
-        Quantity: lineItem[0].OrderedQty,
-        PrimeLineNo: lineItem[0].PrimeLineNo,
-        SubLineNo: lineItem[0].SubLineNo,
-      };
-      OrderLine.push(orderLinePayload);
+      if (itemDetails[0].product_type == "bundle") {
+        orderItems.map(async (orderItem) => {
+          if (item.product_type != "bundle") {
+            const lineItem = OrderLines.OrderLine.filter(
+              (line) => line.Item.ItemID == orderItem.product_id,
+            );
+            let orderLinePayload = {
+              BaseDropStatus,
+              Quantity: lineItem[0].OrderedQty,
+              PrimeLineNo: lineItem[0].PrimeLineNo,
+              SubLineNo: lineItem[0].SubLineNo,
+            };
+            OrderLine.push(orderLinePayload);
+          }
+        });
+      } else {
+        const lineItem = OrderLines.OrderLine.filter(
+          (line) => line.Item.ItemID == itemDetails[0].product_id,
+        );
+        let orderLinePayload = {
+          BaseDropStatus,
+          Quantity: lineItem[0].OrderedQty,
+          PrimeLineNo: lineItem[0].PrimeLineNo,
+          SubLineNo: lineItem[0].SubLineNo,
+        };
+        OrderLine.push(orderLinePayload);
+      }
     });
     let payload = {
       EnterpriseCode,
@@ -800,21 +850,41 @@ async function receiveOrderPayload(
         (line) => line.item_id == item.order_item_id,
       );
       console.log("itemDetails", itemDetails);
-      const lineItem = OrderLines.OrderLine.filter(
-        (line) => line.Item.ItemID == itemDetails[0].product_id,
-      );
-      console.log("lineItem", lineItem);
-      let orderLinePayload = {
-        PrimeLineNo: lineItem[0].PrimeLineNo,
-        SubLineNo: lineItem[0].SubLineNo,
-        OrderLineKey: lineItem[0].OrderLineKey,
-        ItemID: lineItem[0].Item.ItemID,
-        UnitOfMeasure: lineItem[0].Item.UnitOfMeasure,
-        Quantity: lineItem[0].OrderedQty,
-        ProductClass: lineItem[0].Item.ProductClass,
-        DispositionCode: "",
-      };
-      receiptLine.push(orderLinePayload);
+      if (itemDetails[0].product_type == "bundle") {
+        orderItems.map(async (orderItem) => {
+          const lineItem = OrderLines.OrderLine.filter(
+            (line) => line.Item.ItemID == orderItem.product_id,
+          );
+          console.log("lineItem", lineItem);
+          let orderLinePayload = {
+            PrimeLineNo: lineItem[0].PrimeLineNo,
+            SubLineNo: lineItem[0].SubLineNo,
+            OrderLineKey: lineItem[0].OrderLineKey,
+            ItemID: lineItem[0].Item.ItemID,
+            UnitOfMeasure: lineItem[0].Item.UnitOfMeasure,
+            Quantity: lineItem[0].OrderedQty,
+            ProductClass: lineItem[0].Item.ProductClass,
+            DispositionCode: "",
+          };
+          receiptLine.push(orderLinePayload);
+        });
+      } else {
+        const lineItem = OrderLines.OrderLine.filter(
+          (line) => line.Item.ItemID == itemDetails[0].product_id,
+        );
+        console.log("lineItem", lineItem);
+        let orderLinePayload = {
+          PrimeLineNo: lineItem[0].PrimeLineNo,
+          SubLineNo: lineItem[0].SubLineNo,
+          OrderLineKey: lineItem[0].OrderLineKey,
+          ItemID: lineItem[0].Item.ItemID,
+          UnitOfMeasure: lineItem[0].Item.UnitOfMeasure,
+          Quantity: lineItem[0].OrderedQty,
+          ProductClass: lineItem[0].Item.ProductClass,
+          DispositionCode: "",
+        };
+        receiptLine.push(orderLinePayload);
+      }
     });
 
     let payload = {
