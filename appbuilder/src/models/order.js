@@ -852,21 +852,23 @@ async function receiveOrderPayload(
       console.log("itemDetails", itemDetails);
       if (itemDetails[0].product_type == "bundle") {
         orderItems.map(async (orderItem) => {
-          const lineItem = OrderLines.OrderLine.filter(
-            (line) => line.Item.ItemID == orderItem.product_id,
-          );
-          console.log("lineItem", lineItem);
-          let orderLinePayload = {
-            PrimeLineNo: lineItem[0].PrimeLineNo,
-            SubLineNo: lineItem[0].SubLineNo,
-            OrderLineKey: lineItem[0].OrderLineKey,
-            ItemID: lineItem[0].Item.ItemID,
-            UnitOfMeasure: lineItem[0].Item.UnitOfMeasure,
-            Quantity: lineItem[0].OrderedQty,
-            ProductClass: lineItem[0].Item.ProductClass,
-            DispositionCode: "",
-          };
-          receiptLine.push(orderLinePayload);
+          if (item.product_type != "bundle") {
+            const lineItem = OrderLines.OrderLine.filter(
+              (line) => line.Item.ItemID == orderItem.product_id,
+            );
+            console.log("lineItem", lineItem);
+            let orderLinePayload = {
+              PrimeLineNo: lineItem[0].PrimeLineNo,
+              SubLineNo: lineItem[0].SubLineNo,
+              OrderLineKey: lineItem[0].OrderLineKey,
+              ItemID: lineItem[0].Item.ItemID,
+              UnitOfMeasure: lineItem[0].Item.UnitOfMeasure,
+              Quantity: lineItem[0].OrderedQty,
+              ProductClass: lineItem[0].Item.ProductClass,
+              DispositionCode: "",
+            };
+            receiptLine.push(orderLinePayload);
+          }
         });
       } else {
         const lineItem = OrderLines.OrderLine.filter(
@@ -1307,11 +1309,16 @@ async function memoACPayload(orderDetails, invoice, comment) {
 
     invoice.items.map((item) => {
       const { order_item_id, qty } = item;
-      memoItems.push({
-        order_item_id: order_item_id,
-        qty: qty,
-      });
-      returnStock.push(order_item_id);
+      const itemDetails = orderDetails.filter(
+        (line) => line.item_id == item.order_item_id,
+      );
+      if (itemDetails[0].product_type != "bundle") {
+        memoItems.push({
+          order_item_id: order_item_id,
+          qty: qty,
+        });
+        returnStock.push(order_item_id);
+      }
     });
 
     let payload = {
