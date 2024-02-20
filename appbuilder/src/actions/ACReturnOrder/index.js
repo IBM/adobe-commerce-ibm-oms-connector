@@ -320,7 +320,7 @@ async function main(params) {
             await Promise.all(
               invoice.items.map(async (element) => {
                 const memoPayload = await memoACPayload(
-                  adobeOrder[0],
+                  adobeOrder,
                   element,
                   "CREDITMEMO_FOR_RETURN",
                 );

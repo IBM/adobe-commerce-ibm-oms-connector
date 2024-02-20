@@ -538,26 +538,26 @@ async function returnOrderPayload(
       console.log("itemDetails " + JSON.stringify(itemDetails));
       if (itemDetails[0].product_type == "bundle") {
         orderItems.map(async (orderItem) => {
-          if (item.product_type != "bundle") {
-            const lineItem = OrderLines.OrderLine.filter(
-              (line) => line.Item.ItemID == orderItem.product_id,
-            );
-            console.log("lineItem " + JSON.stringify(lineItem));
+          //if (orderItem.product_type == "bundle") {
+          const lineItem = OrderLines.OrderLine.filter(
+            (line) => line.Item.ItemID == orderItem.product_id,
+          );
+          console.log("lineItem " + JSON.stringify(lineItem));
 
-            const ShipNode = OrderStatuses.OrderStatus.filter(
-              (line) => line.OrderLineKey == lineItem[0].OrderLineKey,
-            )[0].ShipNode;
-            let orderLinePayload = {
-              OrderedQty: item.qty_requested,
-              ReturnReason: item.reason,
-              DerivedFrom: {
-                OrderLineKey: lineItem[0].OrderLineKey,
-              },
-              ShipNode,
-            };
-            OrderLine.push(orderLinePayload);
-            console.log("orderLinePayload " + JSON.stringify(orderLinePayload));
-          }
+          const ShipNode = OrderStatuses.OrderStatus.filter(
+            (line) => line.OrderLineKey == lineItem[0].OrderLineKey,
+          )[0].ShipNode;
+          let orderLinePayload = {
+            OrderedQty: item.qty_requested,
+            ReturnReason: item.reason,
+            DerivedFrom: {
+              OrderLineKey: lineItem[0].OrderLineKey,
+            },
+            ShipNode,
+          };
+          OrderLine.push(orderLinePayload);
+          console.log("orderLinePayload " + JSON.stringify(orderLinePayload));
+          //}
         });
       } else {
         const lineItem = OrderLines.OrderLine.filter(
@@ -639,18 +639,18 @@ async function changeOrderStatusPayload(params, omsOrderDetails, key, logger) {
       );
       if (itemDetails[0].product_type == "bundle") {
         orderItems.map(async (orderItem) => {
-          if (item.product_type != "bundle") {
-            const lineItem = OrderLines.OrderLine.filter(
-              (line) => line.Item.ItemID == orderItem.product_id,
-            );
-            let orderLinePayload = {
-              BaseDropStatus,
-              Quantity: lineItem[0].OrderedQty,
-              PrimeLineNo: lineItem[0].PrimeLineNo,
-              SubLineNo: lineItem[0].SubLineNo,
-            };
-            OrderLine.push(orderLinePayload);
-          }
+          //if (orderItem.product_type == "bundle") {
+          const lineItem = OrderLines.OrderLine.filter(
+            (line) => line.Item.ItemID == orderItem.product_id,
+          );
+          let orderLinePayload = {
+            BaseDropStatus,
+            Quantity: lineItem[0].OrderedQty,
+            PrimeLineNo: lineItem[0].PrimeLineNo,
+            SubLineNo: lineItem[0].SubLineNo,
+          };
+          OrderLine.push(orderLinePayload);
+          //}
         });
       } else {
         const lineItem = OrderLines.OrderLine.filter(
@@ -852,7 +852,7 @@ async function receiveOrderPayload(
       console.log("itemDetails", itemDetails);
       if (itemDetails[0].product_type == "bundle") {
         orderItems.map(async (orderItem) => {
-          if (item.product_type != "bundle") {
+          if (orderItem.product_type != "bundle") {
             const lineItem = OrderLines.OrderLine.filter(
               (line) => line.Item.ItemID == orderItem.product_id,
             );
@@ -1306,21 +1306,32 @@ async function memoACPayload(orderDetails, invoice, comment) {
       : 0;
     let memoItems = [];
     let returnStock = [];
-
-    invoice.items.map((item) => {
-      const { order_item_id, qty } = item;
-      const itemDetails = orderDetails.filter(
-        (line) => line.item_id == item.order_item_id,
-      );
-      if (itemDetails[0].product_type != "bundle") {
+    const order = orderDetails.filter((line) => line.product_type == "bundle");
+    if (order.length > 0) {
+      invoice.items.map((item) => {
+        const { order_item_id, qty } = item;
+        const orderItem = orderDetails.filter(
+          (line) =>
+            line.item_id == order_item_id && line.product_type != "bundle",
+        );
+        if (orderItem.length > 0) {
+          memoItems.push({
+            order_item_id: order_item_id,
+            qty: qty,
+          });
+          returnStock.push(order_item_id);
+        }
+      });
+    } else {
+      invoice.items.map((item) => {
+        const { order_item_id, qty } = item;
         memoItems.push({
           order_item_id: order_item_id,
           qty: qty,
         });
         returnStock.push(order_item_id);
-      }
-    });
-
+      });
+    }
     let payload = {
       isOnline: true,
       notify: true,
