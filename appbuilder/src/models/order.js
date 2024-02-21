@@ -1306,14 +1306,19 @@ async function memoACPayload(orderDetails, invoice, comment) {
       : 0;
     let memoItems = [];
     let returnStock = [];
-    const order = orderDetails.filter((line) => line.product_type == "bundle");
+    const order = orderDetails[0].items.filter(
+      (line) => line.product_type == "bundle",
+    );
+    console.log("order : " + JSON.stringify(order));
     if (order.length > 0) {
       invoice.items.map((item) => {
         const { order_item_id, qty } = item;
-        const orderItem = orderDetails.filter(
+        const orderItem = orderDetails[0].items.filter(
           (line) =>
             line.item_id == order_item_id && line.product_type != "bundle",
         );
+        console.log("orderItem : " + JSON.stringify(orderItem));
+
         if (orderItem.length > 0) {
           memoItems.push({
             order_item_id: order_item_id,
@@ -1348,7 +1353,7 @@ async function memoACPayload(orderDetails, invoice, comment) {
         },
       },
     };
-    console.log("payload", payload);
+    console.log("payload", JSON.stringify(payload));
 
     return payload;
   } catch (e) {
