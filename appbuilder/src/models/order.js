@@ -129,6 +129,7 @@ async function createOrderPayload(
           PrimeLineNo: PrimeLineNoIndex,
           SubLineNo: 1,
           OrderedQty: item.qty_ordered,
+          KitQty: item.qty_ordered,
           EarliestScheduleDate: time.format("YYYY-MM-DD[T]HH:mm:ss"),
           Item: {
             ItemID: item.product_id,
