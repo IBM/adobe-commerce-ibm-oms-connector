@@ -5,16 +5,44 @@
  */
 
 jQuery(document).ready(function($) {
+    var ItemId;
     var ItemQty = 1;
     ItemQty = jQuery("#qty").val();
-    var ItemId = jQuery("input[name='item']").val();
-     
-   jQuery("#qty").on("input", function() {
-         ItemQty =  jQuery(this).val(); 
-         console.log('ItemQTY'+ItemQty); 
-    });  
-    
+    jQuery("#qty").on("input", function() {
+        ItemQty =  jQuery(this).val(); 
+        console.log('ItemQTY'+ItemQty); 
+   }); 
 
+    if (jQuery('#product-options-wrapper').length && !jQuery('.bundle-options-wrapper').length) {
+        console.log('This is a configurable product');
+        jQuery('#react-component-wrapper').hide();
+       
+        /// Setting config product child id ///
+        jQuery(".product-options-wrapper .swatch-opt" ).click(function() {
+            var selProId = ($('[data-role=swatch-options]').data('mage-SwatchRenderer').getProduct());
+            jQuery("input[name='selected_configurable_option']").val(selProId);
+            ItemId = selProId;
+            jQuery('#react-component-wrapper').show();
+            console.log('Child product id:'+ItemId); 
+            ReloadReactComponent(base_webhookurl, ibmOrgId, ItemId, countryId, postcode, ItemQty, accessToken,isLoggedin);
+         });
+         // Get child product id for cofig product for select swaches //
+         jQuery(".product-options-wrapper select[id^='attribute']").last().on('change', function() {
+            setTimeout(function (){
+               var simpleProductId= $("input[name=selected_configurable_option]").val();
+               ItemId = simpleProductId;
+               jQuery('#react-component-wrapper').show();
+               console.log('Child product id:'+ItemId); 
+
+               ReloadReactComponent(base_webhookurl, ibmOrgId, ItemId, countryId, postcode, ItemQty, accessToken,isLoggedin);
+
+            }, 500);  
+        }); 
+
+    }else{
+        var ItemId = jQuery("input[name='item']").val();
+    }
+    
 // Ajax function //
 function getApiDataJson() {
     var ajaxUrl = BASE_URL+'getapidata/Getapidata/Index';
@@ -90,6 +118,7 @@ if (document.getElementById('root-pdp-react-select-delivery-method')) {
          itemId={ItemId}
          lineId="1"
          organizationId={ibmOrgId}
+         getAlert= "1111"
         />
     </React.Suspense>, element);
 }
@@ -98,4 +127,46 @@ if (document.getElementById('root-pdp-react-select-delivery-method')) {
 }
 });
 
+
+function ReloadReactComponent(base_webhookurl, ibmOrgId, ItemId, countryId, postcode, ItemQty, accessToken,isLoggedin) {
+   
+    if(isLoggedin === true && postcode!== 'undefined'){
+    const elementDeliveryinfo = document.getElementById('root-pdp-react-delivery-time');
+    const Deliveryinfo = React.lazy(() => import('delivery_time/index'));
+    ReactDOM.render(<React.Suspense fallback={<div dangerouslySetInnerHTML={{ __html: elementDeliveryinfo.innerHTML }} />}>
+        <Deliveryinfo originalContent={elementDeliveryinfo.innerHTML}
+            buttonColor="#1a79c2"
+            webhookURL={base_webhookurl}
+            ibmOrganizationId={ibmOrgId}
+            itemId={ItemId}
+            country={countryId}
+            zipCode={postcode}
+            requiredQty={ItemQty}
+            webhookAccessToken={accessToken} />
+    </React.Suspense>, elementDeliveryinfo);
+   }
+    const elementSourceLocations = document.getElementById('root-pdp-react-selectsource');
+    const SourceLocations = React.lazy(() => import('location_stock_availability/index'));
+    ReactDOM.render(<React.Suspense fallback={<div dangerouslySetInnerHTML={{ __html: elementSourceLocations.innerHTML }} />}>
+        <SourceLocations originalContent={elementSourceLocations.innerHTML}
+            isSourceButtonShow={true}
+            isInstoreButtonShow={false}
+            webhookURL={base_webhookurl}
+            webhookAccessToken={accessToken}
+            itemId={ItemId}
+            lineId="1"
+            organizationId={ibmOrgId} />
+    </React.Suspense>, elementSourceLocations);
+
+    const elementDeliveryMethod = document.getElementById('root-pdp-react-select-delivery-method');
+    const DeliveryMethod = React.lazy(() => import('delivery_method/index'));
+    ReactDOM.render(<React.Suspense fallback={<div dangerouslySetInnerHTML={{ __html: elementDeliveryMethod.innerHTML }} />}>
+        <DeliveryMethod originalContent={elementDeliveryMethod.innerHTML}
+            webhookURL={base_webhookurl}
+            webhookAccessToken={accessToken}
+            itemId={ItemId}
+            lineId="1"
+            organizationId={ibmOrgId} />
+    </React.Suspense>, elementDeliveryMethod);
+}
 

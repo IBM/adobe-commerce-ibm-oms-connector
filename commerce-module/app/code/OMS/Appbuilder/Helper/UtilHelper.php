@@ -204,6 +204,22 @@ class UtilHelper
         }
        
         curl_close($ch);
+        // Decode JSON
+            $response_data = json_decode($res, true);
+            // Check if "errors" key exists and if it contains any elements
+            if (isset($response_data['errors']) && !empty($response_data['errors'])) {
+                // If there are errors, handle them
+                $errors = $response_data['errors'];
+                foreach ($errors as $error) {
+                    $error_code = $error['ErrorCode'];
+                    $error_description = $error['ErrorDescription'];
+                    $http_code = $error['httpcode'];
+                    $responseErrorMessage = "Error: $error_code - $error_description (HTTP Code: $http_code)";
+                    $this->_logger->error($responseErrorMessage);
+                }
+                return json_encode([]);
+            }
+
         if(!($status >= 200 && $status <= 299)){
            
             $this->_logger->error("Not getting response code in between 200 to 299");
