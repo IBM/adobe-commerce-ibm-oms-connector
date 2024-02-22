@@ -35,50 +35,93 @@ async function preparePaymentObj(type, payment, authExpirationSpan) {
       ],
     };
   } else if (type === "capture") {
-    paymentObj = {
-      PaymentMethod: [
-        {
-          CreditCardNo: payment.cc_last_4,
-          UnlimitedCharges: "N",
-          CreditCardExpDate: `${payment.cc_exp_month}/${payment.cc_exp_year}`,
-          PaymentType: "CREDIT_CARD",
-          PaymentDetailsList: {
-            PaymentDetails: [
-              {
-                ChargeType: "CHARGE",
-                ProcessedAmount: payment.amount_authorized,
-                RequestAmount: payment.amount_authorized,
-              },
-            ],
+    if (payment.cc_last_4 == null) {
+      paymentObj = {
+        PaymentMethod: [
+          {
+            UnlimitedCharges: "N",
+            PaymentType: "OTHER",
+            PaymentReference1: payment.id,
+            PaymentDetailsList: {
+              PaymentDetails: [
+                {
+                  ChargeType: "CHARGE",
+                  ProcessedAmount: payment.amount_ordered,
+                  RequestAmount: payment.amount_ordered,
+                },
+              ],
+            },
           },
-        },
-      ],
-    };
+        ],
+      };
+    } else {
+      paymentObj = {
+        PaymentMethod: [
+          {
+            CreditCardNo: payment.cc_last_4,
+            UnlimitedCharges: "N",
+            CreditCardExpDate: `${payment.cc_exp_month}/${payment.cc_exp_year}`,
+            PaymentType: "CREDIT_CARD",
+            PaymentDetailsList: {
+              PaymentDetails: [
+                {
+                  ChargeType: "CHARGE",
+                  ProcessedAmount: payment.amount_authorized,
+                  RequestAmount: payment.amount_authorized,
+                },
+              ],
+            },
+          },
+        ],
+      };
+    }
   } else if (type === "authorization") {
     let authorizationDate = moment().utc().add(authExpirationSpan, "days");
-
-    paymentObj = {
-      PaymentMethod: [
-        {
-          CreditCardNo: payment.cc_last_4,
-          UnlimitedCharges: "N",
-          CreditCardExpDate: `${payment.cc_exp_month}/${payment.cc_exp_year}`,
-          PaymentType: "CREDIT_CARD",
-          PaymentDetailsList: {
-            PaymentDetails: [
-              {
-                AuthorizationExpirationDate:
-                  authorizationDate.format("YYYY-MM-DD"),
-                AuthorizationID: payment.additional_information.riskDataId,
-                ChargeType: "AUTHORIZATION",
-                ProcessedAmount: payment.amount_authorized,
-                RequestAmount: payment.amount_authorized,
-              },
-            ],
+    if (payment.cc_last_4 == null) {
+      paymentObj = {
+        PaymentMethod: [
+          {
+            PaymentType: "OTHER",
+            UnlimitedCharges: "N",
+            PaymentReference1: payment.id,
+            PaymentDetailsList: {
+              PaymentDetails: [
+                {
+                  AuthorizationExpirationDate:
+                    authorizationDate.format("YYYY-MM-DD"),
+                  ChargeType: "AUTHORIZATION",
+                  ProcessedAmount: payment.amount_ordered,
+                  RequestAmount: payment.amount_ordered,
+                },
+              ],
+            },
           },
-        },
-      ],
-    };
+        ],
+      };
+    } else {
+      paymentObj = {
+        PaymentMethod: [
+          {
+            CreditCardNo: payment.cc_last_4,
+            UnlimitedCharges: "N",
+            CreditCardExpDate: `${payment.cc_exp_month}/${payment.cc_exp_year}`,
+            PaymentType: "CREDIT_CARD",
+            PaymentDetailsList: {
+              PaymentDetails: [
+                {
+                  AuthorizationExpirationDate:
+                    authorizationDate.format("YYYY-MM-DD"),
+                  AuthorizationID: payment.additional_information.riskDataId,
+                  ChargeType: "AUTHORIZATION",
+                  ProcessedAmount: payment.amount_authorized,
+                  RequestAmount: payment.amount_authorized,
+                },
+              ],
+            },
+          },
+        ],
+      };
+    }
   }
   return paymentObj;
 }
@@ -1022,33 +1065,60 @@ async function changeOrderCreditPayload(
   try {
     const { grand_total } = params.data.value.invoice;
     const { OrderNo, BillToKey, ShipToKey } = omsReturnOrderDetail;
-
-    let payload = {
-      EnterpriseCode: userDetails.orgId,
-      DocumentType: "0003",
-      OrderNo,
-      PaymentMethods: {
-        PaymentMethod: [
-          {
-            CreditCardNo: adobeOrder.payment.cc_last4,
-            PaymentType: "CREDIT_CARD",
-            ChargeSequence: "1",
-            PaymentDetailsList: {
-              PaymentDetails: [
-                {
-                  ChargeType: "CHARGE",
-                  RequestAmount: `-${grand_total}`,
-                  ProcessedAmount: `-${grand_total}`,
-                },
-              ],
+    let payload;
+    if (adobeOrder.payment.cc_last4 == null) {
+      payload = {
+        EnterpriseCode: userDetails.orgId,
+        DocumentType: "0003",
+        OrderNo,
+        PaymentMethods: {
+          PaymentMethod: [
+            {
+              PaymentType: "OTHER",
+              PaymentReference1: adobeOrder.payment.id,
+              ChargeSequence: "1",
+              PaymentDetailsList: {
+                PaymentDetails: [
+                  {
+                    ChargeType: "CHARGE",
+                    RequestAmount: `-${grand_total}`,
+                    ProcessedAmount: `-${grand_total}`,
+                  },
+                ],
+              },
+              BillToKey,
+              ShipToKey,
             },
-            BillToKey,
-            ShipToKey,
-          },
-        ],
-      },
-    };
-
+          ],
+        },
+      };
+    } else {
+      payload = {
+        EnterpriseCode: userDetails.orgId,
+        DocumentType: "0003",
+        OrderNo,
+        PaymentMethods: {
+          PaymentMethod: [
+            {
+              CreditCardNo: adobeOrder.payment.cc_last4,
+              PaymentType: "CREDIT_CARD",
+              ChargeSequence: "1",
+              PaymentDetailsList: {
+                PaymentDetails: [
+                  {
+                    ChargeType: "CHARGE",
+                    RequestAmount: `-${grand_total}`,
+                    ProcessedAmount: `-${grand_total}`,
+                  },
+                ],
+              },
+              BillToKey,
+              ShipToKey,
+            },
+          ],
+        },
+      };
+    }
     return payload;
   } catch (e) {
     let response = {
