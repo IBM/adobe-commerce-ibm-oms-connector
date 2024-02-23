@@ -25,6 +25,8 @@ const {
   getTransactions,
 } = require("../../services/AdobeCommerceService");
 const { get, save, init, remove } = require("../../config/StateStore");
+const { PRODUCT_TYPE } = require("../../config/constant");
+
 // const { getOMSOrderDetails } = require("../../services/OMSService");
 // const { getUserDetails } = require("../../auth/OMSAuthentication");
 
@@ -69,6 +71,10 @@ async function main(params, log) {
       let order_item_idArray = adobeOrderDetails.items;
       let order_obj = [];
 
+      const configurableProduct = order_item_idArray.filter(
+        (line) => line.product_type == PRODUCT_TYPE.CONFIGURABLE,
+      );
+
       shipmentLinesData.map((item) => {
         let selectedOrder = order_item_idArray.filter(
           (i) => i.product_id == item.ItemID,
@@ -80,7 +86,10 @@ async function main(params, log) {
 
         if (selectedOrder.length > 0 && item.OrderReleaseKey) {
           order_obj.push({
-            order_item_id: selectedOrder[0].item_id,
+            order_item_id:
+              configurableProduct.length > 0
+                ? selectedOrder[0].parent_item_id
+                : selectedOrder[0].item_id,
             qty: item.Quantity,
           });
         }
