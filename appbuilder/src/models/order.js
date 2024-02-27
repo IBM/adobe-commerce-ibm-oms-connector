@@ -603,6 +603,28 @@ async function returnOrderPayload(
           console.log("orderLinePayload " + JSON.stringify(orderLinePayload));
           //}
         });
+      } else if (itemDetails[0].product_type == "configurable") {
+        const productOptions = JSON.parse(item.product_options);
+        const lineItem = OrderLines.OrderLine.filter(
+          (line) =>
+            line.Item.ItemID ==
+            productOptions.info_buyRequest.selected_configurable_option,
+        );
+        console.log("lineItem " + JSON.stringify(lineItem));
+
+        const ShipNode = OrderStatuses.OrderStatus.filter(
+          (line) => line.OrderLineKey == lineItem[0].OrderLineKey,
+        )[0].ShipNode;
+        let orderLinePayload = {
+          OrderedQty: item.qty_requested,
+          ReturnReason: item.reason,
+          DerivedFrom: {
+            OrderLineKey: lineItem[0].OrderLineKey,
+          },
+          ShipNode,
+        };
+        OrderLine.push(orderLinePayload);
+        console.log("orderLinePayload " + JSON.stringify(orderLinePayload));
       } else {
         const lineItem = OrderLines.OrderLine.filter(
           (line) => line.Item.ItemID == itemDetails[0].product_id,
@@ -696,6 +718,20 @@ async function changeOrderStatusPayload(params, omsOrderDetails, key, logger) {
           OrderLine.push(orderLinePayload);
           //}
         });
+      } else if (itemDetails[0].product_type == "configurable") {
+        const productOptions = JSON.parse(item.product_options);
+        const lineItem = OrderLines.OrderLine.filter(
+          (line) =>
+            line.Item.ItemID ==
+            productOptions.info_buyRequest.selected_configurable_option,
+        );
+        let orderLinePayload = {
+          BaseDropStatus,
+          Quantity: lineItem[0].OrderedQty,
+          PrimeLineNo: lineItem[0].PrimeLineNo,
+          SubLineNo: lineItem[0].SubLineNo,
+        };
+        OrderLine.push(orderLinePayload);
       } else {
         const lineItem = OrderLines.OrderLine.filter(
           (line) => line.Item.ItemID == itemDetails[0].product_id,
@@ -914,6 +950,25 @@ async function receiveOrderPayload(
             receiptLine.push(orderLinePayload);
           }
         });
+      } else if (itemDetails[0].product_type == "configurable") {
+        const productOptions = JSON.parse(item.product_options);
+        const lineItem = OrderLines.OrderLine.filter(
+          (line) =>
+            line.Item.ItemID ==
+            productOptions.info_buyRequest.selected_configurable_option,
+        );
+        console.log("lineItem", lineItem);
+        let orderLinePayload = {
+          PrimeLineNo: lineItem[0].PrimeLineNo,
+          SubLineNo: lineItem[0].SubLineNo,
+          OrderLineKey: lineItem[0].OrderLineKey,
+          ItemID: lineItem[0].Item.ItemID,
+          UnitOfMeasure: lineItem[0].Item.UnitOfMeasure,
+          Quantity: lineItem[0].OrderedQty,
+          ProductClass: lineItem[0].Item.ProductClass,
+          DispositionCode: "",
+        };
+        receiptLine.push(orderLinePayload);
       } else {
         const lineItem = OrderLines.OrderLine.filter(
           (line) => line.Item.ItemID == itemDetails[0].product_id,
@@ -1380,6 +1435,9 @@ async function memoACPayload(orderDetails, invoice, comment) {
     const order = orderDetails[0].items.filter(
       (line) => line.product_type == "bundle",
     );
+    const isConfigItem = orderDetails[0].items.filter(
+      (line) => line.product_type == "configurable",
+    );
     console.log("order : " + JSON.stringify(order));
     if (order.length > 0) {
       invoice.items.map((item) => {
@@ -1387,6 +1445,24 @@ async function memoACPayload(orderDetails, invoice, comment) {
         const orderItem = orderDetails[0].items.filter(
           (line) =>
             line.item_id == order_item_id && line.product_type != "bundle",
+        );
+        console.log("orderItem : " + JSON.stringify(orderItem));
+
+        if (orderItem.length > 0) {
+          memoItems.push({
+            order_item_id: order_item_id,
+            qty: qty,
+          });
+          returnStock.push(order_item_id);
+        }
+      });
+    } else if (isConfigItem.length > 0) {
+      invoice.items.map((item) => {
+        const { order_item_id, qty } = item;
+        const orderItem = orderDetails[0].items.filter(
+          (line) =>
+            line.item_id == order_item_id &&
+            line.product_type == "configurable",
         );
         console.log("orderItem : " + JSON.stringify(orderItem));
 
