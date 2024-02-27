@@ -17,6 +17,7 @@ use Magento\Checkout\Exception;
 use OMS\Appbuilder\Logger\Logger;
 use OMS\Appbuilder\Helper\UtilHelper;
 use OMS\Appbuilder\Helper\OmsReservationHelper;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 
 
 class ValidateCartObserver implements ObserverInterface
@@ -52,6 +53,10 @@ class ValidateCartObserver implements ObserverInterface
     private $_omsReservationHelper;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    protected $productRepository;
+    /**
      * @var Logger
      */
     private $logger;
@@ -68,6 +73,7 @@ class ValidateCartObserver implements ObserverInterface
         \Magento\Backend\App\ConfigInterface $config,
         UtilHelper $util,
         OmsReservationHelper $omsReservationHelper,
+        ProductRepositoryInterface $productRepository,
         Logger $logger
     ) {
         $this->messageManager = $messageManager;
@@ -76,6 +82,7 @@ class ValidateCartObserver implements ObserverInterface
         $this->_config = $config;
         $this->_util = $util;
         $this->_omsReservationHelper = $omsReservationHelper;
+        $this->productRepository = $productRepository;
         $this->logger = $logger;
     }
 
@@ -105,15 +112,37 @@ class ValidateCartObserver implements ObserverInterface
             $index = 0;
 
             foreach ($quote->getItems() as $quoteitem) {
+                // Check if the product is a configurable product
+                if ($quoteitem->getProductType() === \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
+                    // For configurable products, get the selected simple product (child)
+                    $productOption = $quoteitem->getOptionByCode('simple_product');
+                   
+                        $childProductId = $productOption->getProductId();
+                        try {
+                            // Load product by ID
+                            $product = $this->productRepository->getById($childProductId);
+                            // Get the name of the child product
+                            $childProductName = $product->getName();
+                        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                            // Handle the case when the product cannot be loaded
+                            $childProductName = 'Unknown'; // Set a default name
+                        }
+                } else {
+                    // For other product types (simple, bundle, virtual, etc.), use the product ID and name directly
+                    $childProductId = $quoteitem->getProductId();
+                    $childProductName = $quoteitem->getName();
+                }
+               
                 $item = [
-                    "itemId" => $quoteitem->getProductId(),
+                    "itemId" => $childProductId,
                     "lineId" => ($index + 1),
-                    "name" => $quoteitem->getName(),
+                    "name" => $childProductName, // Use the child product name
                     'qty' => $quoteitem->getQty()
                 ];
+            
 
                 $item_reservation = [
-                    "product_id" => $quoteitem->getProductId(),
+                    "product_id" => $childProductId,
                     "qty_ordered" => $quoteitem->getQty()
                 ];
 
