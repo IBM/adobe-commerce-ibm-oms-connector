@@ -154,5 +154,7 @@ export const API_TEMPLATE = {
 };
 
 export const PRODUCT_TYPE = {
+  SIMPLE: "simple",
   CONFIGURABLE: "configurable",
+  BUNDLE: "bundle",
 };

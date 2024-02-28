@@ -71,25 +71,35 @@ async function main(params, log) {
       let order_item_idArray = adobeOrderDetails.items;
       let order_obj = [];
 
-      const configurableProduct = order_item_idArray.filter(
-        (line) => line.product_type == PRODUCT_TYPE.CONFIGURABLE,
-      );
+      // const configurableProduct = order_item_idArray.filter(
+      //   (line) => line.product_type == PRODUCT_TYPE.CONFIGURABLE,
+      // );
 
       shipmentLinesData.map((item) => {
         let selectedOrder = order_item_idArray.filter(
           (i) => i.product_id == item.ItemID,
         );
+
         logger.info("selectedOrder" + JSON.stringify(selectedOrder));
         logger.info(
           "selectedOrder[0].ItemID" + JSON.stringify(selectedOrder[0].item_id),
         );
 
+        let productId = selectedOrder[0].item_id;
+
+        if (selectedOrder[0].parent_item_id) {
+          const configurableProduct = order_item_idArray.filter(
+            (line) =>
+              line.item_id == selectedOrder[0].parent_item_id &&
+              line.product_type == PRODUCT_TYPE.CONFIGURABLE,
+          );
+          if (configurableProduct.length > 0)
+            productId = selectedOrder[0].parent_item_id;
+        }
+
         if (selectedOrder.length > 0 && item.OrderReleaseKey) {
           order_obj.push({
-            order_item_id:
-              configurableProduct.length > 0
-                ? selectedOrder[0].parent_item_id
-                : selectedOrder[0].item_id,
+            order_item_id: productId,
             qty: item.Quantity,
           });
         }
