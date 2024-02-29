@@ -98,11 +98,12 @@ async function main(params) {
       const response = getResponse(orderResponse, STATUS.SUCCESS);
       return response;
     } else if (status === RETURN_STATUS.AUTHORIZED) {
-      const omsOrderDetail = await getOMSOrderDetails(
+      const omsOrderDetail = await getOMSReturnOrderDetails(
         params,
         userDetails,
-        params.data.value.order_id,
+        params.data.value.entity_id,
       );
+
       const statusPayload = await changeOrderStatusPayload(
         params,
         omsOrderDetail[0],
@@ -256,7 +257,7 @@ async function main(params) {
 
       logger.info("orderObj: " + JSON.stringify(orderObj));
 
-      const omsOrderDetail = await getOMSOrderDetails(
+      const omsOrderDetail = await getOMSReturnOrderDetails(
         params,
         userDetails,
         params.data.value.order_id,
