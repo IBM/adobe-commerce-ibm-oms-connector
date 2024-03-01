@@ -59,7 +59,8 @@ async function main(params) {
       updatedParams.addresses.length === undefined
     ) {
       const resObj = {
-        content: "Items and Address are not in correct format",
+        content:
+          "Problem processing this request." + JSON.stringify(updatedParams),
         status: "Adobe Payload is not correct",
       };
       let response = getResponse(resObj, STATUS.SUCCESS);
@@ -121,7 +122,9 @@ async function main(params) {
 
     if (!prepareOrderRequest.validPayload) {
       const resObj = {
-        content: "Items and Address are not in correct format",
+        content:
+          "Problem processing your request." +
+          JSON.stringify(prepareOrderRequest),
         status: "Adobe Payload is not correct",
       };
       let response = getResponse(resObj, STATUS.SUCCESS);
