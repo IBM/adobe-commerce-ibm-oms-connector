@@ -168,6 +168,18 @@ async function createOrderPayload(
 
     items.map((item) => {
       if (item.product_type != PRODUCT_TYPE.CONFIGURABLE) {
+        let itemPrice = item.price;
+
+        const parent = items.filter(
+          (line) =>
+            line.item_id == item.parent_item_id &&
+            line.product_type == PRODUCT_TYPE.CONFIGURABLE,
+        );
+
+        if (parent.length > 0) {
+          itemPrice = parent[0].price;
+        }
+
         let orderLinePayload = {
           PrimeLineNo: PrimeLineNoIndex,
           SubLineNo: 1,
@@ -181,7 +193,7 @@ async function createOrderPayload(
           },
           LinePriceInfo: {
             // UnitPrice: item.price - item.discount_amount / item.qty_ordered,
-            UnitPrice: item.price,
+            UnitPrice: itemPrice,
             IsPriceLocked: item.has_children ? "N" : "Y",
           },
         };
