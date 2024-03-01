@@ -288,27 +288,6 @@ async function main(params) {
       const response = getResponse(resp, STATUS.SUCCESS);
       return response;
     } else if (status === RETURN_STATUS.PROCESSED_CLOSED) {
-      // if (status === RETURN_STATUS.PROCESSED_CLOSED) {
-      //   const adobeOrder = await getAdobeOrderDetails(
-      //     oauth,
-      //     params.data.value.order_id,
-      //   );
-
-      //   logger.info("adobeOrder-1" + JSON.stringify(adobeOrder));
-
-      //   const invoice = await getInvoice(oauth, params.data.value.order_id);
-
-      //   logger.info("adobeOrder-2" + JSON.stringify(adobeOrder));
-
-      //   const memoPayload = await memoACPayload(
-      //     adobeOrder.items,
-      //     invoice.items[0],
-      //     "CREDITMEMO_FOR_RETURN",
-      //   );
-      //   console.log("memoPayload", memoPayload);
-      //   return memoPayload;
-      // }
-      // return;
       const omsReturnOrderDetail = await getOMSReturnOrderDetails(
         params,
         userDetails,
