@@ -94,7 +94,7 @@ async function main(params) {
           const invoice = await getInvoice(oauth, params.data.value.order_id);
 
           const memoPayload = await memoACPayload(
-            adobeOrder[0],
+            adobeOrder[0].items,
             "CREDITMEMO_FOR_BACKORDER_CANCEL",
           );
           const memoResp = await createACReturnMemo(

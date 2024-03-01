@@ -1443,6 +1443,74 @@ async function memoACPayload(orderDetails, invoice, comment) {
       : 0;
     let memoItems = [];
     let returnStock = [];
+    console.log("orderDetails : ", orderDetails);
+    console.log("invoice : ", invoice);
+
+    invoice.items.map((item) => {
+      const { order_item_id, qty } = item;
+
+      const orderDetail = orderDetails.filter(
+        (line) => line.item_id == order_item_id,
+      );
+      console.log("orderDetail : " + JSON.stringify(orderDetail[0]));
+
+      if (orderDetail[0].product_type != "bundle") {
+        let processed = true;
+
+        const parent = orderDetails.filter(
+          (line) =>
+            line.item_id == orderDetail[0].parent_item_id &&
+            line.product_type == "configurable",
+        );
+
+        if (parent.length > 0) {
+          processed = false;
+        }
+
+        if (processed) {
+          memoItems.push({
+            order_item_id: order_item_id,
+            qty: qty,
+          });
+          returnStock.push(order_item_id);
+        }
+      }
+    });
+
+    let payload = {
+      isOnline: true,
+      notify: true,
+      appendComment: true,
+      items: memoItems,
+      comment: {
+        comment,
+        is_visible_on_front: 1,
+      },
+      arguments: {
+        shipping_amount: shipAmount,
+        extension_attributes: {
+          return_to_stock_items: returnStock,
+        },
+      },
+    };
+    console.log("memoACPayload: ", JSON.stringify(payload));
+
+    return payload;
+  } catch (e) {
+    let response = {
+      message: e,
+      payload: "",
+    };
+    return response;
+  }
+}
+async function memoACPayload2(orderDetails, invoice, comment) {
+  try {
+    let shipAmount = invoice.base_shipping_amount
+      ? invoice.base_shipping_amount
+      : 0;
+    let memoItems = [];
+    let returnStock = [];
     const order = orderDetails[0].items.filter(
       (line) => line.product_type == "bundle",
     );
@@ -1522,7 +1590,6 @@ async function memoACPayload(orderDetails, invoice, comment) {
     return response;
   }
 }
-
 async function memoACPayload1(orderDetails, invoice, comment) {
   try {
     let shipAmount = invoice.base_shipping_amount

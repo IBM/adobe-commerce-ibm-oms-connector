@@ -288,6 +288,27 @@ async function main(params) {
       const response = getResponse(resp, STATUS.SUCCESS);
       return response;
     } else if (status === RETURN_STATUS.PROCESSED_CLOSED) {
+      // if (status === RETURN_STATUS.PROCESSED_CLOSED) {
+      //   const adobeOrder = await getAdobeOrderDetails(
+      //     oauth,
+      //     params.data.value.order_id,
+      //   );
+
+      //   logger.info("adobeOrder-1" + JSON.stringify(adobeOrder));
+
+      //   const invoice = await getInvoice(oauth, params.data.value.order_id);
+
+      //   logger.info("adobeOrder-2" + JSON.stringify(adobeOrder));
+
+      //   const memoPayload = await memoACPayload(
+      //     adobeOrder.items,
+      //     invoice.items[0],
+      //     "CREDITMEMO_FOR_RETURN",
+      //   );
+      //   console.log("memoPayload", memoPayload);
+      //   return memoPayload;
+      // }
+      // return;
       const omsReturnOrderDetail = await getOMSReturnOrderDetails(
         params,
         userDetails,
@@ -304,10 +325,10 @@ async function main(params) {
           (item) => item.status === "received",
         );
         if (previousStatus.length > 0) {
-          const creditMemos = await getCreditMemos(
-            oauth,
-            params.data.value.order_id,
-          );
+          // const creditMemos = await getCreditMemos(
+          //   oauth,
+          //   params.data.value.order_id,
+          // );
           const adobeOrder = await orderInAdobe(
             oauth,
             params.data.value.order_id,
@@ -321,7 +342,7 @@ async function main(params) {
             await Promise.all(
               invoice.items.map(async (element) => {
                 const memoPayload = await memoACPayload(
-                  adobeOrder,
+                  adobeOrder[0].items,
                   element,
                   "CREDITMEMO_FOR_RETURN",
                 );
