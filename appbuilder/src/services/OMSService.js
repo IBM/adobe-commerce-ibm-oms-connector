@@ -187,7 +187,7 @@ async function fetchRetry(
     let attempt = 0;
     while (found !== true && attempt < counter) {
       try {
-        await sleep(1000);
+        await sleep(100);//It was 1000, but due to it is delaying the API call hence reduce from 1000 to 100 
         attempt = attempt + 1;
         const response = await fetch(customizeURL, option);
         if (response.status != retryStatusCode || attempt == counter) {
