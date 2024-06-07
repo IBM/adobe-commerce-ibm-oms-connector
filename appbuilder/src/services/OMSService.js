@@ -187,7 +187,7 @@ async function fetchRetry(
     let attempt = 0;
     while (found !== true && attempt < counter) {
       try {
-        await sleep(100);//It was 1000, but due to it is delaying the API call hence reduce from 1000 to 100 
+        await sleep(100); //It was 1000, but due to it is delaying the API call hence reduce from 1000 to 100
         attempt = attempt + 1;
         const response = await fetch(customizeURL, option);
         if (response.status != retryStatusCode || attempt == counter) {
@@ -451,13 +451,15 @@ async function getStockDetails(params, userDetails, stockPayload) {
     );
 
     //Preparing the Query
-    let query = "?_loginid=" + params.OMS_ADMIN_USERNAME + "&_token=";
+    let query = "?_loginid=" + params.OMS_USERNAME + "&_token="; // Use OMS_ADMIN_USERNAME for ADMIN USER
+
     // call login endpoint passing client certificate
 
     if (attachTemplate) {
+      // Use OMS_ADMIN_USERNAME for ADMIN USER
       query =
         "?_loginid=" +
-        params.OMS_ADMIN_USERNAME +
+        params.OMS_USERNAME +
         API_TEMPLATE.GET_STOCK_DETAIL +
         "&_token=";
     }
@@ -509,12 +511,13 @@ async function getDeliveryTime(params, userDetails, orderData) {
     const cert = await fs.readFileSync(CONFIG.LOGIN_CERTIFICATE_FILE);
     //setToken in local veriable
     localToken = userDetails.token;
-    let query = "?_loginid=" + params.OMS_ADMIN_USERNAME + "&_token=";
+    let query = "?_loginid=" + params.OMS_USERNAME + "&_token="; // Use OMS_ADMIN_USERNAME for ADMIN USER
 
     if (attachTemplate) {
+      // Use OMS_ADMIN_USERNAME for ADMIN USER
       query =
         "?_loginid=" +
-        params.OMS_ADMIN_USERNAME +
+        params.OMS_USERNAME +
         API_TEMPLATE.PROMISE_DELIVERY_DATE +
         "&_token=";
     }
@@ -565,12 +568,13 @@ async function reserveAvailableInventory(params, userDetails, reserveData) {
     const cert = await fs.readFileSync(CONFIG.LOGIN_CERTIFICATE_FILE);
     //setToken in local veriable
     localToken = userDetails.token;
-    let query = "?_loginid=" + params.OMS_ADMIN_USERNAME + "&_token=";
+    let query = "?_loginid=" + params.OMS_USERNAME + "&_token="; // Use OMS_ADMIN_USERNAME for ADMIN USER
 
     if (attachTemplate) {
+      // Use OMS_ADMIN_USERNAME for ADMIN USER
       query =
         "?_loginid=" +
-        params.OMS_ADMIN_USERNAME +
+        params.OMS_USERNAME +
         API_TEMPLATE.RESERVE_AVAILABLE_INVENTORY +
         "&_token=";
     }
@@ -622,12 +626,14 @@ async function cancelOrderOMS(params, userDetails, data) {
     //setToken in local veriable
 
     localToken = userDetails.token;
-    let query = "?_loginid=" + params.OMS_ADMIN_USERNAME + "&_token=";
+    let query = "?_loginid=" + params.OMS_USERNAME + "&_token="; // Use OMS_ADMIN_USERNAME for ADMIN USER
 
     if (attachTemplate) {
+      // Use OMS_ADMIN_USERNAME for ADMIN USER
+
       query =
         "?_loginid=" +
-        params.OMS_ADMIN_USERNAME +
+        params.OMS_USERNAME +
         API_TEMPLATE.CANCEL_ORDER +
         "&_token=";
     }
@@ -1094,12 +1100,13 @@ async function recordInvoiceCreation(params, userDetails, data) {
     //setToken in local veriable
     localToken = userDetails.token;
     //Preparing the Query
-    let query = "?_loginid=" + params.OMS_ADMIN_USERNAME + "&_token=";
+    let query = "?_loginid=" + params.OMS_USERNAME + "&_token="; // Use OMS_ADMIN_USERNAME for ADMIN USER
 
     if (attachTemplate) {
+      // Use OMS_ADMIN_USERNAME for ADMIN USER
       query =
         "?_loginid=" +
-        params.OMS_ADMIN_USERNAME +
+        params.OMS_USERNAME +
         API_TEMPLATE.RECORD_INVOICE_CREATION +
         "&_token=";
     }
@@ -1149,7 +1156,8 @@ async function recordExternalCharges(params, userDetails, data) {
     //setToken in local veriable
     localToken = userDetails.token;
     //Preparing the Query
-    let query = "?_loginid=" + params.OMS_ADMIN_USERNAME + "&_token=";
+    let query = "?_loginid=" + params.OMS_USERNAME + "&_token="; // Use OMS_ADMIN_USERNAME for ADMIN USER
+
     // call login endpoint passing client certificate
     const request = await fetchRetry(
       params.OMS_API_BASE_URL + OMS_API.RECORD_EXTERNAL_CHARGES + query,

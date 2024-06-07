@@ -21,8 +21,12 @@ async function login(params, reAuth = false, isAdmin) {
     try {
       // retrieve P12 certificate
       const cert = await fs.readFileSync(CONFIG.LOGIN_CERTIFICATE_FILE);
-      let loginID = isAdmin ? params.OMS_ADMIN_USERNAME : params.OMS_USERNAME;
-      let password = isAdmin ? params.OMS_ADMIN_PASSWORD : params.OMS_PASSWORD;
+
+      // BELOW CODE TO USE TO CALL LOGIN AS ADMIN
+      // let loginID = isAdmin ? params.OMS_ADMIN_USERNAME : params.OMS_USERNAME;
+      // let password = isAdmin ? params.OMS_ADMIN_PASSWORD : params.OMS_PASSWORD;
+      let loginID = params.OMS_USERNAME;
+      let password = params.OMS_PASSWORD;
       console.log("loginId", loginID, password);
 
       // call login endpoint passing client certificate
