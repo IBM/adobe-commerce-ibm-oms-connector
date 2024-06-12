@@ -71,9 +71,11 @@ async function getUserDetails(param, isAdmin = false) {
   try {
     let tokenAvailable = await isTokenAvailable(isAdmin ? true : false);
     if (tokenAvailable) {
-      let token = isAdmin
-        ? await get(CONFIG.OMS_ADMIN_TOKEN_NAME)
-        : await get(CONFIG.OMS_TOKEN_NAME);
+      //USE BELOW LINE FOR ADMIN ROLE
+      // let token = isAdmin
+      //   ? await get(CONFIG.OMS_ADMIN_TOKEN_NAME)
+      //   : await get(CONFIG.OMS_TOKEN_NAME);
+      let token = await get(CONFIG.OMS_TOKEN_NAME);
       let orgId = await get(CONFIG.OMS_ORG);
       console.log("getUserDetails :token," + token + " ,orgId" + orgId);
       return {
@@ -89,9 +91,11 @@ async function getUserDetails(param, isAdmin = false) {
 }
 
 async function isTokenAvailable(isAdmin) {
-  const token = isAdmin
-    ? await get(CONFIG.OMS_ADMIN_TOKEN_NAME)
-    : await get(CONFIG.OMS_TOKEN_NAME);
+  //USE BELOW CODE FOR ADMIN
+  // const token = isAdmin
+  //   ? await get(CONFIG.OMS_ADMIN_TOKEN_NAME)
+  //   : await get(CONFIG.OMS_TOKEN_NAME);
+  const token = await get(CONFIG.OMS_TOKEN_NAME);
   const orgId = await get(CONFIG.OMS_ORG);
 
   if (token != undefined && orgId != undefined) {
